@@ -1,0 +1,30 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>{{ divida().credor }}</mat-card-title>
+    <mat-card-subtitle>{{ divida().descricao }}</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <span class="rotulo">Valor pendente</span>
+    <strong>{{ divida().valorOriginal | currency:'BRL' }}</strong>
+
+    <dl>
+      <div>
+        <dt>Vencimento</dt>
+        <dd>{{ divida().vencimento | date:'dd/MM/yyyy' }}</dd>
+      </div>
+      <div>
+        <dt>Status</dt>
+        <dd>
+          <mat-chip [class.atrasada]="divida().status === 'ATRASADA'">
+            {{ divida().status === 'ATRASADA' ? 'Em atraso' : 'A vencer' }}
+          </mat-chip>
+        </dd>
+      </div>
+    </dl>
+  </mat-card-content>
+
+  <mat-card-actions align="end">
+    <button mat-flat-button color="primary" (click)="simular.emit(divida())">Simular acordo</button>
+  </mat-card-actions>
+</mat-card>

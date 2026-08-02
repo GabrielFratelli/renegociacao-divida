@@ -1,0 +1,30 @@
+<mat-toolbar color="primary" class="barra-principal">
+  <a
+    class="marca"
+    routerLink="/dividas"
+    aria-label="Início do Portal de Renegociação"
+  >
+    <mat-icon aria-hidden="true">handshake</mat-icon>
+    <span>Portal de Renegociação</span>
+  </a>
+
+  <nav aria-label="Navegação principal">
+    <a mat-button routerLink="/dividas" routerLinkActive="ativo"
+      >Minhas dívidas</a
+    >
+    <a mat-button routerLink="/simular" routerLinkActive="ativo"
+      >Simular proposta</a
+    >
+  </nav>
+
+  <span class="preenchedor"></span>
+
+  @if (autenticacao.usuario(); as usuario) {
+    <span class="saudacao">Olá, {{ usuario.nome }}</span>
+    <button mat-button (click)="autenticacao.sair()">Sair</button>
+  } @else {
+    <button mat-button (click)="abrirLogin()">Entrar</button>
+  }
+</mat-toolbar>
+
+<main class="conteudo-principal"><router-outlet /></main>

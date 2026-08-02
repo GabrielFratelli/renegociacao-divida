@@ -1,0 +1,147 @@
+header {
+  margin: 1rem 0 2rem;
+}
+
+h1 {
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+  margin: 0.15rem 0 0.5rem;
+}
+
+h2 {
+  font-size: 1.2rem;
+}
+
+p {
+  color: #526070;
+  margin: 0;
+}
+
+.sobretitulo {
+  color: #1d5da9;
+  font-weight: 600;
+}
+
+.grade-simulacao {
+  align-items: start;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(250px, 0.8fr) minmax(350px, 1.2fr);
+}
+
+.resumo-divida {
+  grid-row: span 2;
+}
+
+mat-card-content {
+  padding-top: 1rem;
+}
+
+.resumo-divida {
+  span {
+    color: #526070;
+    display: block;
+  }
+
+  strong {
+    display: block;
+    font-size: 1.8rem;
+    margin: 0.25rem 0 1rem;
+  }
+}
+
+.opcoes-pagamento {
+  display: grid;
+  gap: 0.9rem;
+  margin: 1rem 0;
+}
+
+mat-radio-button small {
+  color: #526070;
+  margin-left: 0.5rem;
+}
+
+mat-form-field {
+  display: block;
+  width: 100%;
+}
+
+.resultado {
+  grid-column: 2;
+}
+
+.valores {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(3, 1fr);
+  margin-bottom: 1.5rem;
+
+  span {
+    color: #526070;
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  b,
+  strong {
+    color: #172033;
+    font-size: 1.1rem;
+  }
+
+  .positivo {
+    color: #19713b;
+  }
+}
+
+.destaque-parcela {
+  display: grid;
+  font-size: 1.35rem;
+  gap: 0.2rem;
+
+  strong {
+    font-size: 1.65rem;
+  }
+
+  small {
+    color: #526070;
+    display: grid;
+    gap: 0.25rem;
+  }
+}
+
+.erro {
+  color: #b3261e;
+  margin-bottom: 1rem;
+}
+
+.sem-divida {
+  align-content: center;
+  background: #fff;
+  border-radius: 12px;
+  display: grid;
+  gap: 1rem;
+  justify-items: center;
+  min-height: 240px;
+  text-align: center;
+}
+
+mat-spinner {
+  display: inline-block;
+}
+
+@media (max-width: 760px) {
+  .grade-simulacao {
+    grid-template-columns: 1fr;
+  }
+
+  .resultado {
+    grid-column: auto;
+  }
+
+  .resumo-divida {
+    grid-row: auto;
+  }
+
+  .valores {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,39 @@
+<section aria-labelledby="titulo-dividas">
+  <header>
+    <div>
+      <p class="sobretitulo">Negocie de forma simples</p>
+      <h1 id="titulo-dividas">Suas dívidas</h1>
+      <p>Confira os valores pendentes e escolha uma dívida para montar sua proposta.</p>
+    </div>
+    <button mat-stroked-button (click)="dividas.carregar()" [disabled]="!autenticacao.autenticado()">Atualizar</button>
+  </header>
+
+  @if (!autenticacao.autenticado()) {
+    <div class="estado-vazio">
+      <h2>Entre para consultar suas dívidas</h2>
+      <p>Use o botão Entrar no topo da página.</p>
+    </div>
+  } @else if (dividas.carregando()) {
+    <div class="carregando">
+      <mat-spinner diameter="36" />
+      <span>Carregando suas dívidas…</span>
+    </div>
+  } @else if (dividas.erro(); as erro) {
+    <div class="estado-vazio">
+      <h2>Algo não saiu como esperado</h2>
+      <p>{{ erro }}</p>
+      <button mat-flat-button color="primary" (click)="dividas.carregar()">Tentar novamente</button>
+    </div>
+  } @else if (dividas.dividas().length === 0) {
+    <div class="estado-vazio">
+      <h2>Nenhuma dívida pendente</h2>
+      <p>Quando houver uma oportunidade de negociação, ela aparecerá aqui.</p>
+    </div>
+  } @else {
+    <div class="grade-dividas">
+      @for (divida of dividas.dividas(); track divida.id) {
+        <app-cartao-divida [divida]="divida" (simular)="abrirSimulacao($event)" />
+      }
+    </div>
+  }
+</section>

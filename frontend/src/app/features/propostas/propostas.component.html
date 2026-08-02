@@ -1,0 +1,94 @@
+<section aria-labelledby="titulo-simulacao">
+  <a mat-button routerLink="/dividas">← Voltar para dívidas</a>
+
+  <header>
+    <p class="sobretitulo">Crie a melhor alternativa</p>
+    <h1 id="titulo-simulacao">Simular proposta</h1>
+    <p>Escolha a modalidade e veja as condições antes de tomar uma decisão.</p>
+  </header>
+
+  @if (dividaSelecionada(); as divida) {
+    <div class="grade-simulacao">
+      <mat-card class="resumo-divida">
+        <mat-card-header>
+          <mat-card-title>{{ divida.credor }}</mat-card-title>
+          <mat-card-subtitle>{{ divida.descricao }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <span>Valor pendente</span>
+          <strong>{{ divida.valorOriginal | currency:'BRL' }}</strong>
+          <p>Vencimento original: {{ divida.vencimento | date:'dd/MM/yyyy' }}</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-content>
+          <form [formGroup]="formulario" (ngSubmit)="simular()">
+            <h2>Como você prefere pagar?</h2>
+
+            <mat-radio-group formControlName="tipoPagamento" class="opcoes-pagamento">
+              <mat-radio-button value="A_VISTA">À vista <small>Maior desconto</small></mat-radio-button>
+              <mat-radio-button value="PARCELADO">Parcelado <small>Escolha até 24 parcelas</small></mat-radio-button>
+            </mat-radio-group>
+
+            @if (formulario.controls.tipoPagamento.value === 'PARCELADO') {
+              <mat-form-field appearance="outline">
+                <mat-label>Quantidade de parcelas</mat-label>
+                <mat-select formControlName="quantidadeParcelas">
+                  @for (parcela of opcoesParcelas; track parcela) {
+                    <mat-option [value]="parcela">{{ parcela }}x</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            }
+
+            <mat-form-field appearance="outline">
+              <mat-label>Primeiro vencimento</mat-label>
+              <input matInput [matDatepicker]="calendario" formControlName="dataPrimeiroVencimento" [min]="hoje">
+              <mat-datepicker-toggle matIconSuffix [for]="calendario" />
+              <mat-datepicker #calendario />
+            </mat-form-field>
+
+            @if (erro(); as erro) {
+              <p class="erro" role="alert">{{ erro }}</p>
+            }
+
+            <button mat-flat-button color="primary" type="submit" [disabled]="formulario.invalid || carregando()">
+              @if (carregando()) {
+                <mat-spinner diameter="18" aria-label="Simulando" />
+              } @else {
+                Calcular proposta
+              }
+            </button>
+          </form>
+        </mat-card-content>
+      </mat-card>
+
+      @if (proposta(); as resultado) {
+        <mat-card class="resultado" aria-live="polite">
+          <mat-card-header>
+            <mat-card-title>Proposta simulada</mat-card-title>
+            <mat-card-subtitle>{{ resultado.mensagem }}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="valores">
+              <span>Valor original <b>{{ resultado.valorOriginal | currency:'BRL' }}</b></span>
+              <span>Desconto <b class="positivo">- {{ resultado.desconto | currency:'BRL' }}</b></span>
+              <span>Total para pagar <strong>{{ resultado.valorFinal | currency:'BRL' }}</strong></span>
+            </div>
+            <div class="destaque-parcela">
+              {{ resultado.quantidadeParcelas }}x de <strong>{{ resultado.valorParcela | currency:'BRL' }}</strong>
+              <small>1º vencimento: {{ resultado.vencimentoPrimeiraParcela | date:'dd/MM/yyyy' }}</small>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+  } @else {
+    <div class="sem-divida">
+      <h2>Escolha uma dívida para começar</h2>
+      <p>Volte à lista e selecione a dívida que deseja negociar.</p>
+      <a mat-flat-button color="primary" routerLink="/dividas">Ver minhas dívidas</a>
+    </div>
+  }
+</section>
