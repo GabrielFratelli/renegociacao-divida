@@ -1,4 +1,4 @@
-export type StatusDivida = 'ATRASADA' | 'A_VENCER';
+export type StatusDivida = "ATRASADA" | "A_VENCER";
 
 export interface Divida {
   id: string;

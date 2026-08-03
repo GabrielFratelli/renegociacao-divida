@@ -58,7 +58,7 @@ npm ci
 npm start
 ```
 
-Acesse `http://localhost:4200` e autentique com `cliente@exemplo.com` e `123456`.
+Acesse `http://localhost:4200` e autentique com `gabriel.fratelli@email.com` e `123456Biel@`.
 
 ## Testes
 

@@ -3,9 +3,18 @@
     <div>
       <p class="sobretitulo">Negocie de forma simples</p>
       <h1 id="titulo-dividas">Suas dívidas</h1>
-      <p>Confira os valores pendentes e escolha uma dívida para montar sua proposta.</p>
+      <p>
+        Confira os valores pendentes e escolha uma dívida para montar sua
+        proposta.
+      </p>
     </div>
-    <button mat-stroked-button (click)="dividas.carregar()" [disabled]="!autenticacao.autenticado()">Atualizar</button>
+    <button
+      mat-stroked-button
+      (click)="dividas.carregar()"
+      [disabled]="!autenticacao.autenticado()"
+    >
+      Atualizar
+    </button>
   </header>
 
   @if (!autenticacao.autenticado()) {
@@ -22,7 +31,9 @@
     <div class="estado-vazio">
       <h2>Algo não saiu como esperado</h2>
       <p>{{ erro }}</p>
-      <button mat-flat-button color="primary" (click)="dividas.carregar()">Tentar novamente</button>
+      <button mat-flat-button color="primary" (click)="dividas.carregar()">
+        Tentar novamente
+      </button>
     </div>
   } @else if (dividas.dividas().length === 0) {
     <div class="estado-vazio">
@@ -32,7 +43,10 @@
   } @else {
     <div class="grade-dividas">
       @for (divida of dividas.dividas(); track divida.id) {
-        <app-cartao-divida [divida]="divida" (simular)="abrirSimulacao($event)" />
+        <app-cartao-divida
+          [divida]="divida"
+          (simular)="abrirSimulacao($event)"
+        />
       }
     </div>
   }

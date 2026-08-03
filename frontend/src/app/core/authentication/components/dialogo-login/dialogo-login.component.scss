@@ -1,17 +1,25 @@
-mat-form-field {
-  display: block;
-  width: 100%;
-}
+form {
+  mat-dialog-content {
+    mat-form-field {
+      display: block;
+      margin-bottom: 0.75rem;
+      width: 100%;
 
-.erro {
-  color: #b3261e;
-}
+      &:last-of-type {
+        margin-bottom: 0;
+      }
+    }
 
-.ajuda {
-  color: #5f6368;
-  font-size: 0.85rem;
-}
+    .erro {
+      color: #b3261e;
+    }
+  }
 
-mat-spinner {
-  display: inline-block;
+  mat-dialog-actions {
+    button {
+      mat-spinner {
+        display: inline-block;
+      }
+    }
+  }
 }

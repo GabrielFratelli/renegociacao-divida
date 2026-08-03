@@ -1,3 +1,29 @@
-* { box-sizing: border-box; }
-body { margin: 0; background: #f7f9fc; color: #172033; font-family: Roboto, Arial, sans-serif; }
-button, input, select { font: inherit; }
+:root {
+  --cor-principal: #ff6200;
+  --mat-sys-primary: var(--cor-principal);
+  --mat-sys-on-primary: #ffffff;
+  --mdc-filled-button-label-text-color: #ffffff;
+  --mat-sys-primary-container: #ffdbca;
+  --mat-sys-on-primary-container: #391100;
+  --mat-sys-primary-fixed: #ffdbca;
+  --mat-sys-primary-fixed-dim: #ffb68c;
+  --mat-sys-on-primary-fixed: #321200;
+  --mat-sys-on-primary-fixed-variant: #752100;
+  --mat-sys-inverse-primary: #ffb68c;
+  --mat-sys-surface-tint: var(--cor-principal);
+}
+
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: #f7f9fc;
+  color: #172033;
+  font-family: Roboto, Arial, sans-serif;
+}
+button,
+input,
+select {
+  font: inherit;
+}

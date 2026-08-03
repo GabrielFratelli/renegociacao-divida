@@ -2,41 +2,52 @@ mat-card {
   display: flex;
   flex-direction: column;
   height: 100%;
-}
 
-mat-card-content {
-  flex: 1;
-  padding-top: 1rem;
-}
+  mat-card-content {
+    flex: 1;
+    padding-top: 1rem;
 
-strong {
-  display: block;
-  font-size: 1.55rem;
-  margin-block: 0.15rem 1rem;
-}
+    .rotulo {
+      color: #5f6368;
+      font-size: 0.875rem;
+    }
 
-.rotulo,
-dt {
-  color: #5f6368;
-  font-size: 0.875rem;
-}
+    strong {
+      display: block;
+      font-size: 1.55rem;
+      margin-block: 0.15rem 1rem;
+    }
 
-dl {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(2, 1fr);
-  margin: 0;
-}
+    .rodape-card {
+      dl {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+        margin: 0;
 
-dt {
-  margin-bottom: 0.25rem;
-}
+        div {
+          dt {
+            color: #5f6368;
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+          }
 
-dd {
-  margin: 0;
-}
+          dd {
+            margin: 0;
 
-mat-chip.atrasada {
-  --mdc-chip-elevated-container-color: #fee9e7;
-  --mdc-chip-label-text-color: #8c1d18;
+            mat-chip {
+              &.atrasada {
+                --mdc-chip-elevated-container-color: #fee9e7;
+                --mdc-chip-label-text-color: #8c1d18;
+              }
+            }
+          }
+        }
+      }
+
+      ::ng-deep .mat-mdc-card-actions {
+        padding: 0 !important;
+      }
+    }
+  }
 }

@@ -1,4 +1,4 @@
-export type TipoPagamento = 'A_VISTA' | 'PARCELADO';
+export type TipoPagamento = "A_VISTA" | "PARCELADO";
 
 export interface SolicitacaoSimulacao {
   dividaId: string;
