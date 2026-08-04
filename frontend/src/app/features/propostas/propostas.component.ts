@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   computed,
   inject,
   signal,
@@ -18,6 +19,7 @@ import { MatSelectModule } from "@angular/material/select";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { finalize } from "rxjs";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { Divida } from "../../core/models/debt.model";
 import {
   DadosSimulacao,
@@ -54,11 +56,16 @@ export class SimuladorPropostaComponent {
   private readonly rota = inject(ActivatedRoute);
   private readonly roteador = inject(Router);
   private readonly construtorFormulario = inject(FormBuilder);
+  private readonly destroyRef = inject(DestroyRef);
 
   readonly hoje = new Date();
   readonly opcoesParcelas = [2, 3, 4, 6, 8, 10, 12, 18, 24];
   readonly carregando = signal(false);
+  readonly aceitando = signal(false);
   readonly erro = signal<string | null>(null);
+  readonly erroAceite = signal<string | null>(null);
+  readonly confirmandoAceite = signal(false);
+  readonly aceiteConcluido = signal(false);
   readonly proposta = signal<PropostaSimulada | null>(null);
   readonly idDivida = signal(this.rota.snapshot.queryParamMap.get("divida"));
   readonly dividaSelecionada = computed<Divida | null>(
@@ -76,19 +83,27 @@ export class SimuladorPropostaComponent {
   });
 
   constructor() {
-    this.rota.queryParamMap.subscribe((parametros) =>
-      this.idDivida.set(parametros.get("divida")),
-    );
+    this.rota.queryParamMap
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((parametros) => {
+        this.idDivida.set(parametros.get("divida"));
+        this.invalidarProposta();
+      });
+    this.formulario.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.invalidarProposta());
   }
 
   simular(): void {
     const divida = this.dividaSelecionada();
-    if (!divida || this.formulario.invalid) {
+    if (!divida || divida.status === "EM_ACORDO" || this.formulario.invalid) {
       if (!divida) this.roteador.navigate(["/dividas"]);
       return;
     }
     this.carregando.set(true);
     this.erro.set(null);
+    this.erroAceite.set(null);
+    this.confirmandoAceite.set(false);
     const valores = this.formulario.getRawValue();
     const dados: DadosSimulacao = {
       dividaId: divida.id,
@@ -111,6 +126,66 @@ export class SimuladorPropostaComponent {
             "Não foi possível calcular a proposta. Tente novamente.",
           ),
       });
+  }
+
+  solicitarAceite(): void {
+    if (!this.proposta() || this.aceitando() || this.aceiteConcluido()) return;
+    this.erroAceite.set(null);
+    this.confirmandoAceite.set(true);
+  }
+
+  cancelarAceite(): void {
+    if (this.aceitando()) return;
+    this.confirmandoAceite.set(false);
+    this.erroAceite.set(null);
+  }
+
+  aceitarProposta(): void {
+    const proposta = this.proposta();
+    if (
+      !proposta ||
+      !this.confirmandoAceite() ||
+      this.aceitando() ||
+      this.aceiteConcluido()
+    )
+      return;
+
+    this.aceitando.set(true);
+    this.erroAceite.set(null);
+    this.formulario.disable({ emitEvent: false });
+    this.propostas
+      .aceitar(proposta.id)
+      .pipe(
+        finalize(() => {
+          this.aceitando.set(false);
+          this.formulario.enable({ emitEvent: false });
+        }),
+      )
+      .subscribe({
+        next: () => {
+          this.aceiteConcluido.set(true);
+          this.dividas.carregar();
+          this.roteador.navigate(["/dividas"]);
+        },
+        error: () =>
+          this.erroAceite.set(
+            "Não foi possível aceitar a proposta. Ela pode ter expirado; faça uma nova simulação ou tente novamente.",
+          ),
+      });
+  }
+
+  temAjusteNaUltimaParcela(proposta: PropostaSimulada): boolean {
+    return (
+      proposta.quantidadeParcelas > 1 &&
+      Math.abs(proposta.valorUltimaParcela - proposta.valorParcela) >= 0.005
+    );
+  }
+
+  private invalidarProposta(): void {
+    this.proposta.set(null);
+    this.confirmandoAceite.set(false);
+    this.erroAceite.set(null);
+    this.aceiteConcluido.set(false);
   }
 
   private adicionarDias(data: Date, dias: number): Date {

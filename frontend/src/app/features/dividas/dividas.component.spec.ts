@@ -56,4 +56,22 @@ describe("ListaDividasComponent", () => {
       queryParams: { divida: "d-1" },
     });
   });
+
+  it("não abre uma nova simulação para dívida em acordo", () => {
+    const componente = TestBed.createComponent(
+      ListaDividasComponent,
+    ).componentInstance;
+
+    componente.abrirSimulacao({
+      id: "d-1",
+      credor: "Itaú Unibanco",
+      descricao: "Cartão",
+      valorOriginal: 500,
+      vencimento: "2026-05-10",
+      status: "EM_ACORDO",
+      acordoId: "a-1",
+    });
+
+    expect(roteador.navigate).not.toHaveBeenCalled();
+  });
 });

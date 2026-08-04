@@ -122,6 +122,45 @@ section {
               display: grid;
               gap: 0.25rem;
             }
+
+            .ultima-parcela {
+              align-items: baseline;
+              display: flex;
+              gap: 0.35rem;
+            }
+          }
+
+          .acoes-proposta {
+            border-top: 1px solid #dfe3e8;
+            margin-top: 1.5rem;
+            padding-top: 1.25rem;
+
+            .erro {
+              color: #b3261e;
+              margin-bottom: 1rem;
+            }
+
+            .confirmacao-aceite {
+              background: #f5f7fb;
+              border-radius: 10px;
+              padding: 1rem;
+
+              h3 {
+                font-size: 1rem;
+                margin: 0 0 0.4rem;
+              }
+
+              .botoes-confirmacao {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+                margin-top: 1rem;
+              }
+            }
+
+            mat-spinner {
+              display: inline-block;
+            }
           }
         }
       }

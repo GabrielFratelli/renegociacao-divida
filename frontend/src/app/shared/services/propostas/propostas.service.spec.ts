@@ -36,14 +36,45 @@ describe("PropostasService", () => {
     expect(requisicao.request.method).toBe("POST");
     expect(requisicao.request.body.quantidadeParcelas).toBe(6);
     requisicao.flush({
+      id: "p-1",
       dividaId: "d-1",
       valorOriginal: 1000,
       desconto: 100,
       valorFinal: 900,
       quantidadeParcelas: 6,
       valorParcela: 150,
+      valorUltimaParcela: 150,
       vencimentoPrimeiraParcela: "2026-09-01",
+      expiraEm: "2026-08-03T15:00:00.000Z",
       mensagem: "Proposta válida",
+    });
+  });
+
+  it("deve aceitar a proposta pelo identificador", () => {
+    servico.aceitar("p-1/especial").subscribe((acordo) => {
+      expect(acordo.status).toBe("ATIVO");
+      expect(acordo.valorNegociado).toBe(900);
+    });
+
+    const requisicao = http.expectOne(
+      `${ambiente.apiUrl}/propostas/p-1%2Fespecial/aceitar`,
+    );
+    expect(requisicao.request.method).toBe("POST");
+    expect(requisicao.request.body).toEqual({});
+    requisicao.flush({
+      id: "a-1",
+      propostaId: "p-1/especial",
+      dividaId: "d-1",
+      valorOriginal: 1000,
+      valorNegociado: 900,
+      saldoDevedor: 900,
+      desconto: 100,
+      quantidadeParcelas: 6,
+      valorParcela: 150,
+      valorUltimaParcela: 150,
+      proximoVencimento: "2026-09-01",
+      status: "ATIVO",
+      aceitoEm: "2026-08-03T12:00:00.000Z",
     });
   });
 });

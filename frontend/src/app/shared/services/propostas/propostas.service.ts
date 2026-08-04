@@ -2,6 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
 import { ambiente } from "../../../environment";
 import {
+  Acordo,
   DadosSimulacao,
   PropostaSimulada,
 } from "../../../core/models/proposal.model";
@@ -14,6 +15,13 @@ export class PropostasService {
     return this.http.post<PropostaSimulada>(
       `${ambiente.apiUrl}/propostas/simular`,
       dados,
+    );
+  }
+
+  aceitar(propostaId: string) {
+    return this.http.post<Acordo>(
+      `${ambiente.apiUrl}/propostas/${encodeURIComponent(propostaId)}/aceitar`,
+      {},
     );
   }
 }

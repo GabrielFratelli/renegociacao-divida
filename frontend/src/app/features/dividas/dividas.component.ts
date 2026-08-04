@@ -32,6 +32,7 @@ export class ListaDividasComponent {
   }
 
   abrirSimulacao(divida: Divida): void {
+    if (divida.status === "EM_ACORDO") return;
     this.roteador.navigate(["/simular"], {
       queryParams: { divida: divida.id },
     });

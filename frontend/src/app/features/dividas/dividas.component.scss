@@ -29,6 +29,7 @@ section {
   }
 
   .grade-dividas {
+    align-items: start;
     display: grid;
     gap: 1rem;
     grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
