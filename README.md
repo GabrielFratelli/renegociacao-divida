@@ -1,6 +1,24 @@
 # Renegociação de Dívidas
 
-Protótipo full stack para visualização e simulação de renegociação de dívidas. A experiência do cliente contém duas telas: **Dívidas** e **Simular proposta**. A autenticação é realizada por um diálogo de acesso, evitando introduzir uma terceira tela.
+Protótipo full stack para visualização, simulação e contratação de renegociação de dívidas. A experiência do cliente contém duas telas: **Dívidas** e **Simular proposta**. A autenticação é realizada por um diálogo de acesso, evitando introduzir uma terceira tela.
+
+## Fluxo de negociação
+
+1. O cliente escolhe uma dívida e informa modalidade, parcelas e primeiro vencimento.
+2. O BFF calcula e armazena uma simulação temporária identificada, com prazo de validade.
+3. O cliente revisa os valores e confirma explicitamente o aceite da proposta.
+4. O BFF valida titularidade, validade e elegibilidade antes de criar o acordo.
+5. A dívida passa para **Em acordo** e a lista apresenta o saldo negociado, as parcelas e o próximo vencimento, preservando o valor original para auditoria.
+
+O aceite é idempotente: repetir a mesma requisição retorna o acordo já criado, sem duplicá-lo. Quando o arredondamento das parcelas produz diferença de centavos, a última parcela é ajustada para que a soma corresponda exatamente ao valor negociado.
+
+No protótipo, dívidas, simulações e acordos ficam em memória e são reiniciados junto com o backend. Em produção, a criação do acordo e a atualização da dívida devem ocorrer na mesma transação no banco de dados.
+
+### Endpoints do fluxo
+
+- `GET /api/dividas`: lista as dívidas e os dados de eventual acordo ativo.
+- `POST /api/propostas/simular`: cria uma simulação temporária calculada pelo servidor.
+- `POST /api/propostas/:id/aceitar`: aceita uma simulação válida e cria o acordo.
 
 ## Arquitetura AWS
 
@@ -39,33 +57,79 @@ renegociacao-dividas/
 
 Os nomes de domínio e das pastas criadas para o produto estão em português; arquivos estruturais convencionais do Angular permanecem com seus nomes padrão.
 
-## Como executar
+## Como executar localmente
 
-Pré-requisito: Node.js 22.12 ou superior.
+Execute os comandos abaixo a partir da raiz do repositório.
 
-```powershell
-cd backend
-npm ci
-copy .env.example .env
-npm run dev
+### Pré-requisitos
+
+- Node.js `^20.19.0`, `^22.12.0` ou `>=24.0.0`, conforme os requisitos do Angular 20. Recomenda-se a linha 22 LTS, a partir da versão 22.12.
+- npm e acesso à internet para instalar as dependências. O frontend também carrega Google Fonts durante o desenvolvimento e o build.
+- Dois terminais livres, um para cada aplicação.
+
+### 1. Instalar as dependências
+
+```bash
+npm --prefix backend ci
+npm --prefix frontend ci
 ```
 
-Em outro terminal:
+### 2. Configurar o backend
 
-```powershell
-cd frontend
-npm ci
-npm start
+Na primeira execução, copie o arquivo de exemplo. No Linux ou macOS:
+
+```bash
+cp backend/.env.example backend/.env
 ```
 
-Acesse `http://localhost:4200` e autentique com `gabriel.fratelli@email.com` e `123456Biel@`.
-
-## Testes
+No Windows PowerShell:
 
 ```powershell
-cd backend; npm test
-cd frontend; npm test
+Copy-Item backend/.env.example backend/.env
 ```
+
+O exemplo configura a API em `http://localhost:3000` e permite requisições do frontend em `http://localhost:4200`. Se uma dessas portas mudar, ajuste `ORIGEM_PERMITIDA` no backend e `apiUrl` em `frontend/src/app/environment.ts`.
+
+### 3. Iniciar as aplicações
+
+No primeiro terminal, inicie o backend em modo de desenvolvimento:
+
+```bash
+npm --prefix backend run dev
+```
+
+No segundo terminal, inicie o frontend:
+
+```bash
+npm --prefix frontend start
+```
+
+A API estará disponível em `http://localhost:3000/api`, com verificação de saúde em `http://localhost:3000/api/saude`. Acesse `http://localhost:4200` e autentique com `gabriel.fratelli@email.com` e `123456Biel@`.
+
+## Testes e build
+
+Os comandos também devem ser executados a partir da raiz:
+
+```bash
+npm --prefix backend test
+npm --prefix frontend test
+```
+
+Para executar os testes durante o desenvolvimento:
+
+```bash
+npm --prefix backend run test:watch
+npm --prefix frontend run test:watch
+```
+
+Para validar os builds:
+
+```bash
+npm --prefix backend run build
+npm --prefix frontend run build
+```
+
+Após o build, o backend pode ser iniciado com `npm --prefix backend start`. Os arquivos estáticos do frontend ficam em `frontend/dist/portal-renegociacao-dividas`. A configuração atual do frontend aponta para a API local; um deploy em outro ambiente deve fornecer uma configuração de `apiUrl` específica para esse ambiente.
 
 ## Princípios aplicados no BFF
 
