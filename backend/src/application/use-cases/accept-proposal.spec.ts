@@ -85,11 +85,11 @@ describe("AceitarProposta", () => {
 
   it("deve retornar o mesmo acordo em aceites simultâneos da mesma proposta", async () => {
     const gerarId = jest
-      .fn<() => string>()
+      .fn<string, []>()
       .mockReturnValueOnce("acordo-001")
       .mockReturnValue("acordo-002");
     const relogio = jest
-      .fn<() => Date>()
+      .fn<Date, []>()
       .mockReturnValueOnce(new Date("2026-08-03T12:00:00.000Z"))
       .mockReturnValue(new Date("2026-08-03T13:00:00.000Z"));
     const casoDeUso = new AceitarProposta(
@@ -124,7 +124,7 @@ describe("AceitarProposta", () => {
     const repositorioAcordos = new RepositorioAcordosMemoria();
     const repositorioDividas = new RepositorioDividasMemoria([DIVIDA]);
     const gerarId = jest
-      .fn<() => string>()
+      .fn<string, []>()
       .mockReturnValueOnce("acordo-001")
       .mockReturnValue("acordo-002");
     const casoDeUso = new AceitarProposta(

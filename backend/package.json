@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "node --watch --import tsx src/server.ts",
-    "build": "node ./node_modules/typescript/bin/tsc --project tsconfig.json",
+    "build": "node ./node_modules/typescript/bin/tsc --project tsconfig.build.json",
     "start": "node dist/server.js",
     "test": "node ./node_modules/jest/bin/jest.js --runInBand",
     "test:watch": "node ./node_modules/jest/bin/jest.js --watch"

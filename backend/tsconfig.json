@@ -8,10 +8,10 @@
     "strict": true,
     "esModuleInterop": true,
     "isolatedModules": true,
+    "types": ["node", "jest"],
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "noUncheckedIndexedAccess": true
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["src/**/*.spec.ts"]
+  "include": ["src/**/*.ts"]
 }
