@@ -26,4 +26,24 @@ import { Divida } from "../../../../core/models/debt.model";
 export class CartaoDividaComponent {
   readonly divida = input.required<Divida>();
   readonly simular = output<Divida>();
+
+  emAcordo(): boolean {
+    return this.divida().status === "EM_ACORDO";
+  }
+
+  valorEmAberto(): number {
+    const divida = this.divida();
+    if (!this.emAcordo()) return divida.valorOriginal;
+    return divida.saldoDevedor ?? divida.valorNegociado ?? divida.valorOriginal;
+  }
+
+  temAjusteNaUltimaParcela(): boolean {
+    const divida = this.divida();
+    return (
+      (divida.quantidadeParcelas ?? 0) > 1 &&
+      divida.valorParcela !== undefined &&
+      divida.valorUltimaParcela !== undefined &&
+      Math.abs(divida.valorUltimaParcela - divida.valorParcela) >= 0.005
+    );
+  }
 }
