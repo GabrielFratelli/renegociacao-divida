@@ -43,7 +43,7 @@ describe("AppComponent", () => {
     expect(dialogo.open).toHaveBeenCalledWith(DialogoLoginComponent, {
       disableClose: true,
       width: "420px",
-      autoFocus: "first-tabbable",
+      autoFocus: "dialog",
     });
   });
 });

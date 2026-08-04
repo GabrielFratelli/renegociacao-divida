@@ -1,5 +1,12 @@
+h2[mat-dialog-title] {
+  color: var(--cor-principal);
+  font-size: 1.25rem;
+  font-weight: 400;
+}
+
 form {
   mat-dialog-content {
+    border-top: 1px solid var(--cor-principal);
     mat-form-field {
       display: block;
       margin-bottom: 0.75rem;

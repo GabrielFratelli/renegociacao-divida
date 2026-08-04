@@ -36,6 +36,12 @@ describe("DialogoLoginComponent", () => {
     expect(autenticacao.autenticar).not.toHaveBeenCalled();
   });
 
+  it("não exibe erros antes de o usuário interagir com os campos", () => {
+    expect(componente.formulario.controls.email.touched).toBe(false);
+    expect(componente.formulario.controls.senha.touched).toBe(false);
+    expect(fixture.nativeElement.querySelector("mat-error")).toBeNull();
+  });
+
   it("autentica com as credenciais preenchidas e fecha o diálogo", () => {
     autenticacao.autenticar.mockReturnValue(
       of({
@@ -43,6 +49,10 @@ describe("DialogoLoginComponent", () => {
         usuario: { id: "1", nome: "Cliente", email: "gabriel.fratelli@email.com" },
       }),
     );
+    componente.formulario.setValue({
+      email: "gabriel.fratelli@email.com",
+      senha: "123456Biel@",
+    });
 
     componente.entrar();
 
@@ -58,6 +68,10 @@ describe("DialogoLoginComponent", () => {
     autenticacao.autenticar.mockReturnValue(
       throwError(() => new Error("Credenciais inválidas")),
     );
+    componente.formulario.setValue({
+      email: "gabriel.fratelli@email.com",
+      senha: "123456Biel@",
+    });
 
     componente.entrar();
 

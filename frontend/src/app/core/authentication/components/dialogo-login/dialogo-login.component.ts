@@ -12,6 +12,7 @@ import { MatInputModule } from "@angular/material/input";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { finalize } from "rxjs";
 import { AutenticacaoService } from "../../services/autenticacao.service";
+import { MatIconModule } from "@angular/material/icon";
 
 @Component({
   selector: "app-dialogo-login",
@@ -22,6 +23,7 @@ import { AutenticacaoService } from "../../services/autenticacao.service";
     MatInputModule,
     MatButtonModule,
     MatProgressSpinnerModule,
+    MatIconModule
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: "./dialogo-login.component.html",

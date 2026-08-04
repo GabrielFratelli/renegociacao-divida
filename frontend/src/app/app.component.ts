@@ -40,7 +40,7 @@ export class AppComponent implements OnInit {
     this.dialogo.open(DialogoLoginComponent, {
       disableClose: true,
       width: "420px",
-      autoFocus: "first-tabbable",
+      autoFocus: "dialog",
     });
   }
 }
