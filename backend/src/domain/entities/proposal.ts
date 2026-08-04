@@ -8,12 +8,20 @@ export interface SolicitacaoSimulacao {
 }
 
 export interface PropostaSimulada {
+  id: string;
   dividaId: string;
   valorOriginal: number;
   desconto: number;
   valorFinal: number;
   quantidadeParcelas: number;
   valorParcela: number;
+  valorUltimaParcela: number;
   vencimentoPrimeiraParcela: string;
+  expiraEm: string;
   mensagem: string;
+}
+
+export interface Proposta extends PropostaSimulada {
+  clienteId: string;
+  criadaEm: string;
 }

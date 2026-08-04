@@ -1,8 +1,11 @@
+import { randomUUID } from "node:crypto";
 import {
+  Proposta,
   PropostaSimulada,
   SolicitacaoSimulacao,
 } from "../../domain/entities/proposal.js";
 import { RepositorioDividas } from "../../domain/ports/debts-repository.js";
+import { RepositorioPropostas } from "../../domain/ports/proposals-repository.js";
 
 export class DividaNaoEncontradaError extends Error {
   constructor() {
@@ -10,8 +13,20 @@ export class DividaNaoEncontradaError extends Error {
   }
 }
 
+export class DividaInelegivelParaSimulacaoError extends Error {
+  constructor() {
+    super("A dívida já possui um acordo ativo.");
+  }
+}
+
 export class SimularProposta {
-  constructor(private readonly repositorioDividas: RepositorioDividas) {}
+  constructor(
+    private readonly repositorioDividas: RepositorioDividas,
+    private readonly repositorioPropostas: RepositorioPropostas,
+    private readonly relogio: () => Date = () => new Date(),
+    private readonly gerarId: () => string = randomUUID,
+    private readonly validadeEmMilissegundos = 15 * 60 * 1000,
+  ) {}
 
   async executar(
     clienteId: string,
@@ -22,6 +37,9 @@ export class SimularProposta {
       clienteId,
     );
     if (!divida) throw new DividaNaoEncontradaError();
+    if (divida.status === "EM_ACORDO" || divida.acordoId) {
+      throw new DividaInelegivelParaSimulacaoError();
+    }
 
     const quantidadeParcelas =
       solicitacao.tipoPagamento === "A_VISTA"
@@ -31,22 +49,43 @@ export class SimularProposta {
       solicitacao.tipoPagamento,
       quantidadeParcelas,
     );
-    const desconto = this.arredondar(divida.valorOriginal * percentualDesconto);
-    const valorFinal = this.arredondar(divida.valorOriginal - desconto);
-
-    return {
+    const valorOriginalEmCentavos = this.paraCentavos(divida.valorOriginal);
+    const descontoEmCentavos = Math.round(
+      valorOriginalEmCentavos * percentualDesconto,
+    );
+    const valorFinalEmCentavos =
+      valorOriginalEmCentavos - descontoEmCentavos;
+    const valorParcelaEmCentavos = Math.round(
+      valorFinalEmCentavos / quantidadeParcelas,
+    );
+    const valorUltimaParcelaEmCentavos =
+      valorFinalEmCentavos -
+      valorParcelaEmCentavos * (quantidadeParcelas - 1);
+    const agora = this.relogio();
+    const proposta: Proposta = {
+      id: this.gerarId(),
+      clienteId,
+      criadaEm: agora.toISOString(),
+      expiraEm: new Date(
+        agora.getTime() + this.validadeEmMilissegundos,
+      ).toISOString(),
       dividaId: divida.id,
-      valorOriginal: divida.valorOriginal,
-      desconto,
-      valorFinal,
+      valorOriginal: this.deCentavos(valorOriginalEmCentavos),
+      desconto: this.deCentavos(descontoEmCentavos),
+      valorFinal: this.deCentavos(valorFinalEmCentavos),
       quantidadeParcelas,
-      valorParcela: this.arredondar(valorFinal / quantidadeParcelas),
+      valorParcela: this.deCentavos(valorParcelaEmCentavos),
+      valorUltimaParcela: this.deCentavos(valorUltimaParcelaEmCentavos),
       vencimentoPrimeiraParcela: solicitacao.dataPrimeiroVencimento,
       mensagem:
         solicitacao.tipoPagamento === "A_VISTA"
           ? "Desconto especial para pagamento à vista."
           : `Condição distribuída em ${quantidadeParcelas} parcelas.`,
     };
+
+    await this.repositorioPropostas.salvar(proposta);
+
+    return this.paraResposta(proposta);
   }
 
   private calcularPercentualDesconto(
@@ -59,7 +98,16 @@ export class SimularProposta {
     return 0;
   }
 
-  private arredondar(valor: number): number {
-    return Math.round((valor + Number.EPSILON) * 100) / 100;
+  private paraCentavos(valor: number): number {
+    return Math.round((valor + Number.EPSILON) * 100);
+  }
+
+  private deCentavos(valor: number): number {
+    return valor / 100;
+  }
+
+  private paraResposta(proposta: Proposta): PropostaSimulada {
+    const { clienteId: _, criadaEm: __, ...resposta } = proposta;
+    return resposta;
   }
 }

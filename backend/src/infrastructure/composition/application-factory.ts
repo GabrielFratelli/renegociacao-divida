@@ -2,13 +2,16 @@ import cors from "cors";
 import express, { Express, NextFunction, Request, Response } from "express";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
+import { AceitarProposta } from "../../application/use-cases/accept-proposal.js";
 import { ListarDividas } from "../../application/use-cases/list-debts.js";
 import { SimularProposta } from "../../application/use-cases/simulate-proposal.js";
 import { ControladorAutenticacao } from "../../presentation/controllers/authentication-controller.js";
 import { ControladorDividas } from "../../presentation/controllers/debts-controller.js";
 import { ControladorPropostas } from "../../presentation/controllers/proposals-controller.js";
 import { autenticar } from "../../presentation/middlewares/authenticate.js";
+import { RepositorioAcordosMemoria } from "../repositories/in-memory-agreements-repository.js";
 import { RepositorioDividasMemoria } from "../repositories/in-memory-debts-repository.js";
+import { RepositorioPropostasMemoria } from "../repositories/in-memory-proposals-repository.js";
 import { ServicoJwt } from "../security/jwt-service.js";
 
 interface ConfiguracaoAplicacao {
@@ -21,13 +24,20 @@ export const criarAplicacao = (
 ): Express => {
   const aplicacao = express();
   const repositorioDividas = new RepositorioDividasMemoria();
+  const repositorioPropostas = new RepositorioPropostasMemoria();
+  const repositorioAcordos = new RepositorioAcordosMemoria();
   const servicoToken = new ServicoJwt(configuracao.segredoJwt);
   const controladorAutenticacao = new ControladorAutenticacao(servicoToken);
   const controladorDividas = new ControladorDividas(
     new ListarDividas(repositorioDividas),
   );
   const controladorPropostas = new ControladorPropostas(
-    new SimularProposta(repositorioDividas),
+    new SimularProposta(repositorioDividas, repositorioPropostas),
+    new AceitarProposta(
+      repositorioPropostas,
+      repositorioAcordos,
+      repositorioDividas,
+    ),
   );
 
   aplicacao.disable("x-powered-by");
@@ -63,6 +73,11 @@ export const criarAplicacao = (
     "/api/propostas/simular",
     autenticar(servicoToken),
     controladorPropostas.simular,
+  );
+  aplicacao.post(
+    "/api/propostas/:id/aceitar",
+    autenticar(servicoToken),
+    controladorPropostas.aceitar,
   );
   aplicacao.use(
     (erro: unknown, _: Request, resposta: Response, __: NextFunction) => {

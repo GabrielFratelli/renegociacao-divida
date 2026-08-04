@@ -1,6 +1,13 @@
 import { Response } from "express";
 import { z } from "zod";
 import {
+  AceitarProposta,
+  DividaInelegivelParaAcordoError,
+  PropostaExpiradaError,
+  PropostaNaoEncontradaError,
+} from "../../application/use-cases/accept-proposal.js";
+import {
+  DividaInelegivelParaSimulacaoError,
   DividaNaoEncontradaError,
   SimularProposta,
 } from "../../application/use-cases/simulate-proposal.js";
@@ -23,8 +30,13 @@ const esquemaSimulacao = z
     }
   });
 
+const esquemaIdentificadorProposta = z.string().min(1);
+
 export class ControladorPropostas {
-  constructor(private readonly simularProposta: SimularProposta) {}
+  constructor(
+    private readonly simularProposta: SimularProposta,
+    private readonly aceitarProposta: AceitarProposta,
+  ) {}
 
   simular = async (
     requisicao: RequisicaoAutenticada,
@@ -49,6 +61,46 @@ export class ControladorPropostas {
     } catch (erro) {
       if (erro instanceof DividaNaoEncontradaError) {
         resposta.status(404).json({ mensagem: erro.message });
+        return;
+      }
+      if (erro instanceof DividaInelegivelParaSimulacaoError) {
+        resposta.status(409).json({ mensagem: erro.message });
+        return;
+      }
+      throw erro;
+    }
+  };
+
+  aceitar = async (
+    requisicao: RequisicaoAutenticada,
+    resposta: Response,
+  ): Promise<void> => {
+    const identificador = esquemaIdentificadorProposta.safeParse(
+      requisicao.params.id,
+    );
+    if (!identificador.success) {
+      resposta.status(400).json({ mensagem: "Identificador inválido." });
+      return;
+    }
+
+    try {
+      const acordo = await this.aceitarProposta.executar(
+        requisicao.usuario!.id,
+        identificador.data,
+      );
+      const { clienteId: _, ...acordoPublico } = acordo;
+      resposta.json(acordoPublico);
+    } catch (erro) {
+      if (erro instanceof PropostaNaoEncontradaError) {
+        resposta.status(404).json({ mensagem: erro.message });
+        return;
+      }
+      if (erro instanceof PropostaExpiradaError) {
+        resposta.status(410).json({ mensagem: erro.message });
+        return;
+      }
+      if (erro instanceof DividaInelegivelParaAcordoError) {
+        resposta.status(409).json({ mensagem: erro.message });
         return;
       }
       throw erro;
