@@ -12,6 +12,10 @@
     gap: 0.5rem;
     text-decoration: none;
     white-space: nowrap;
+
+    mat-icon {
+      color: var(--cor-principal);
+    }
   }
 
   nav {
