@@ -46,19 +46,19 @@ describe("DialogoLoginComponent", () => {
     autenticacao.autenticar.mockReturnValue(
       of({
         token: "token",
-        usuario: { id: "1", nome: "Cliente", email: "gabriel.fratelli@email.com" },
+        usuario: { id: "1", nome: "Cliente", email: "admin.demo@email.com" },
       }),
     );
     componente.formulario.setValue({
-      email: "gabriel.fratelli@email.com",
-      senha: "123456Biel@",
+      email: "admin.demo@email.com",
+      senha: "admin9090@",
     });
 
     componente.entrar();
 
     expect(autenticacao.autenticar).toHaveBeenCalledWith(
-      "gabriel.fratelli@email.com",
-      "123456Biel@",
+      "admin.demo@email.com",
+      "admin9090@",
     );
     expect(referencia.close).toHaveBeenCalledTimes(1);
     expect(componente.carregando()).toBe(false);
@@ -69,8 +69,8 @@ describe("DialogoLoginComponent", () => {
       throwError(() => new Error("Credenciais inválidas")),
     );
     componente.formulario.setValue({
-      email: "gabriel.fratelli@email.com",
-      senha: "123456Biel@",
+      email: "admin.demo@email.com",
+      senha: "admin9090@",
     });
 
     componente.entrar();
