@@ -19,6 +19,12 @@ export class DividaInelegivelParaSimulacaoError extends Error {
   }
 }
 
+export class DataPrimeiroVencimentoInvalidaError extends Error {
+  constructor() {
+    super("O primeiro vencimento não pode estar no passado.");
+  }
+}
+
 export class SimularProposta {
   constructor(
     private readonly repositorioDividas: RepositorioDividas,
@@ -26,12 +32,19 @@ export class SimularProposta {
     private readonly relogio: () => Date = () => new Date(),
     private readonly gerarId: () => string = randomUUID,
     private readonly validadeEmMilissegundos = 15 * 60 * 1000,
+    private readonly fusoHorario = "America/Sao_Paulo",
   ) {}
 
   async executar(
     clienteId: string,
     solicitacao: SolicitacaoSimulacao,
   ): Promise<PropostaSimulada> {
+    const agora = this.relogio();
+    const hoje = this.formatarDataLocal(agora);
+    if (solicitacao.dataPrimeiroVencimento < hoje) {
+      throw new DataPrimeiroVencimentoInvalidaError();
+    }
+
     const divida = await this.repositorioDividas.buscarPorIdECliente(
       solicitacao.dividaId,
       clienteId,
@@ -53,15 +66,12 @@ export class SimularProposta {
     const descontoEmCentavos = Math.round(
       valorOriginalEmCentavos * percentualDesconto,
     );
-    const valorFinalEmCentavos =
-      valorOriginalEmCentavos - descontoEmCentavos;
+    const valorFinalEmCentavos = valorOriginalEmCentavos - descontoEmCentavos;
     const valorParcelaEmCentavos = Math.round(
       valorFinalEmCentavos / quantidadeParcelas,
     );
     const valorUltimaParcelaEmCentavos =
-      valorFinalEmCentavos -
-      valorParcelaEmCentavos * (quantidadeParcelas - 1);
-    const agora = this.relogio();
+      valorFinalEmCentavos - valorParcelaEmCentavos * (quantidadeParcelas - 1);
     const proposta: Proposta = {
       id: this.gerarId(),
       clienteId,
@@ -104,6 +114,19 @@ export class SimularProposta {
 
   private deCentavos(valor: number): number {
     return valor / 100;
+  }
+
+  private formatarDataLocal(data: Date): string {
+    const partes = new Intl.DateTimeFormat("pt-BR", {
+      timeZone: this.fusoHorario,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).formatToParts(data);
+    const valor = (tipo: Intl.DateTimeFormatPartTypes) =>
+      partes.find((parte) => parte.type === tipo)?.value ?? "";
+
+    return `${valor("year")}-${valor("month")}-${valor("day")}`;
   }
 
   private paraResposta(proposta: Proposta): PropostaSimulada {

@@ -42,8 +42,9 @@ export class AceitarProposta {
     if (!proposta) throw new PropostaNaoEncontradaError();
 
     return this.executarComBloqueio(proposta.dividaId, async () => {
-      const acordoExistente =
-        await this.repositorioAcordos.buscarPorPropostaId(proposta.id);
+      const acordoExistente = await this.repositorioAcordos.buscarPorPropostaId(
+        proposta.id,
+      );
       if (acordoExistente) return acordoExistente;
 
       const agora = this.relogio();
@@ -103,10 +104,10 @@ export class AceitarProposta {
   ): divida is Divida {
     return Boolean(
       divida &&
-        divida.status !== "EM_ACORDO" &&
-        !divida.acordoId &&
-        this.paraCentavos(divida.valorOriginal) ===
-          this.paraCentavos(valorOriginalDaProposta),
+      divida.status !== "EM_ACORDO" &&
+      !divida.acordoId &&
+      this.paraCentavos(divida.valorOriginal) ===
+        this.paraCentavos(valorOriginalDaProposta),
     );
   }
 

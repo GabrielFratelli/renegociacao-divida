@@ -1,6 +1,7 @@
 import { RepositorioDividasMemoria } from "../../infrastructure/repositories/in-memory-debts-repository.js";
 import { RepositorioPropostasMemoria } from "../../infrastructure/repositories/in-memory-proposals-repository.js";
 import {
+  DataPrimeiroVencimentoInvalidaError,
   DividaInelegivelParaSimulacaoError,
   SimularProposta,
 } from "./simulate-proposal.js";
@@ -35,11 +36,10 @@ describe("SimularProposta", () => {
     expect(proposta.id).toBe("proposta-001");
     expect(proposta.expiraEm).toBe("2026-08-03T12:15:00.000Z");
 
-    const propostaPersistida =
-      await repositorioPropostas.buscarPorIdECliente(
-        proposta.id,
-        "cliente-001",
-      );
+    const propostaPersistida = await repositorioPropostas.buscarPorIdECliente(
+      proposta.id,
+      "cliente-001",
+    );
     expect(propostaPersistida).toMatchObject({
       id: "proposta-001",
       clienteId: "cliente-001",
@@ -89,5 +89,15 @@ describe("SimularProposta", () => {
         dataPrimeiroVencimento: "2026-09-01",
       }),
     ).rejects.toBeInstanceOf(DividaInelegivelParaSimulacaoError);
+  });
+
+  it("não deve aceitar primeiro vencimento no passado", async () => {
+    await expect(
+      casoDeUso.executar("cliente-001", {
+        dividaId: "div-001",
+        tipoPagamento: "A_VISTA",
+        dataPrimeiroVencimento: "2026-08-02",
+      }),
+    ).rejects.toBeInstanceOf(DataPrimeiroVencimentoInvalidaError);
   });
 });

@@ -1,13 +1,9 @@
 import { signal } from "@angular/core";
 import { TestBed } from "@angular/core/testing";
-import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { ActivatedRoute, Router, convertToParamMap } from "@angular/router";
 import { Subject, of, throwError } from "rxjs";
 import { Divida } from "../../core/models/debt.model";
-import {
-  Acordo,
-  PropostaSimulada,
-} from "../../core/models/proposal.model";
+import { Acordo, PropostaSimulada } from "../../core/models/proposal.model";
 import { DividasService } from "../../shared/services/dividas/dividas.service";
 import { PropostasService } from "../../shared/services/propostas/propostas.service";
 import { SimuladorPropostaComponent } from "./propostas.component";
@@ -54,7 +50,12 @@ describe("SimuladorPropostaComponent", () => {
     carregar: jest.fn(),
   };
   const propostas = { simular: jest.fn(), aceitar: jest.fn() };
-  const roteador = { navigate: jest.fn() };
+  const roteador = {
+    navigate: jest.fn(),
+    createUrlTree: jest.fn(() => ({})),
+    serializeUrl: jest.fn(() => "/dividas"),
+    events: new Subject(),
+  };
   const parametros = convertToParamMap({ divida: "d-1" });
   const rota = {
     snapshot: { queryParamMap: parametros },
@@ -69,7 +70,7 @@ describe("SimuladorPropostaComponent", () => {
     roteador.navigate.mockClear();
 
     await TestBed.configureTestingModule({
-      imports: [SimuladorPropostaComponent, NoopAnimationsModule],
+      imports: [SimuladorPropostaComponent],
       providers: [
         { provide: DividasService, useValue: dividas },
         { provide: PropostasService, useValue: propostas },

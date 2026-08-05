@@ -47,10 +47,7 @@ describe("AceitarProposta", () => {
       () => "acordo-001",
     );
 
-    const acordo = await casoDeUso.executar(
-      "cliente-001",
-      "proposta-001",
-    );
+    const acordo = await casoDeUso.executar("cliente-001", "proposta-001");
 
     expect(acordo).toEqual({
       id: "acordo-001",

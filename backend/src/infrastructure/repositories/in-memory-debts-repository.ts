@@ -28,8 +28,7 @@ export class RepositorioDividasMemoria implements RepositorioDividas {
 
   async atualizar(divida: Divida): Promise<void> {
     const indice = this.dividas.findIndex(
-      (item) =>
-        item.id === divida.id && item.clienteId === divida.clienteId,
+      (item) => item.id === divida.id && item.clienteId === divida.clienteId,
     );
     if (indice < 0) return;
     this.dividas[indice] = { ...divida };
@@ -49,7 +48,7 @@ const DIVIDAS_INICIAIS: readonly Divida[] = [
   {
     id: "div-002",
     clienteId: "cliente-001",
-    credor: "Financeira Horizonte",
+    credor: "Itaú Unibanco",
     descricao: "Empréstimo pessoal",
     valorOriginal: 920.5,
     vencimento: "2026-07-15",
@@ -58,8 +57,8 @@ const DIVIDAS_INICIAIS: readonly Divida[] = [
   {
     id: "div-003",
     clienteId: "cliente-001",
-    credor: "Loja Casa Nova",
-    descricao: "Carnê de compras",
+    credor: "Itaú Unibanco",
+    descricao: "Cheque especial",
     valorOriginal: 420,
     vencimento: "2026-08-20",
     status: "A_VENCER",
@@ -67,8 +66,8 @@ const DIVIDAS_INICIAIS: readonly Divida[] = [
   {
     id: "div-004",
     clienteId: "cliente-001",
-    credor: "Banco Inter",
-    descricao: "Cartão de crédito final 9271",
+    credor: "Itaú Unibanco",
+    descricao: "Financiamento de veículo",
     valorOriginal: 2350.75,
     vencimento: "2026-06-22",
     status: "ATRASADA",
@@ -76,8 +75,8 @@ const DIVIDAS_INICIAIS: readonly Divida[] = [
   {
     id: "div-005",
     clienteId: "cliente-001",
-    credor: "Creditas",
-    descricao: "Crédito pessoal",
+    credor: "Itaú Unibanco",
+    descricao: "Crédito consignado",
     valorOriginal: 1375.9,
     vencimento: "2026-08-28",
     status: "A_VENCER",

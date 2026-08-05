@@ -16,9 +16,7 @@ export class RepositorioAcordosMemoria implements RepositorioAcordos {
   }
 
   async buscarPorPropostaId(propostaId: string): Promise<Acordo | null> {
-    const acordo = this.acordos.find(
-      (item) => item.propostaId === propostaId,
-    );
+    const acordo = this.acordos.find((item) => item.propostaId === propostaId);
     return acordo ? { ...acordo } : null;
   }
 }
