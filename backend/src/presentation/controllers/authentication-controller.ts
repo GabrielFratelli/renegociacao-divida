@@ -17,8 +17,8 @@ export class ControladorAutenticacao {
       return;
     }
     if (
-      dados.data.email !== "admin.demo@email.com" ||
-      dados.data.senha !== "admin9090@"
+      dados.data.email !== "cliente.demo@email.com" ||
+      dados.data.senha !== "cliente9090@"
     ) {
       resposta.status(401).json({ mensagem: "E-mail ou senha inválidos." });
       return;

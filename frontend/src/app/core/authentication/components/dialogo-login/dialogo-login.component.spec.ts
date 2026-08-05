@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { MatDialogRef } from "@angular/material/dialog";
 import { of, throwError } from "rxjs";
 import { AutenticacaoService } from "../../services/autenticacao.service";
@@ -16,7 +15,7 @@ describe("DialogoLoginComponent", () => {
     referencia = { close: jest.fn() };
 
     await TestBed.configureTestingModule({
-      imports: [DialogoLoginComponent, NoopAnimationsModule],
+      imports: [DialogoLoginComponent],
       providers: [
         { provide: AutenticacaoService, useValue: autenticacao },
         { provide: MatDialogRef, useValue: referencia },
@@ -46,19 +45,23 @@ describe("DialogoLoginComponent", () => {
     autenticacao.autenticar.mockReturnValue(
       of({
         token: "token",
-        usuario: { id: "1", nome: "Cliente", email: "admin.demo@email.com" },
+        usuario: {
+          id: "1",
+          nome: "Cliente",
+          email: "cliente.demo@email.com",
+        },
       }),
     );
     componente.formulario.setValue({
-      email: "admin.demo@email.com",
-      senha: "admin9090@",
+      email: "cliente.demo@email.com",
+      senha: "cliente9090@",
     });
 
     componente.entrar();
 
     expect(autenticacao.autenticar).toHaveBeenCalledWith(
-      "admin.demo@email.com",
-      "admin9090@",
+      "cliente.demo@email.com",
+      "cliente9090@",
     );
     expect(referencia.close).toHaveBeenCalledTimes(1);
     expect(componente.carregando()).toBe(false);
@@ -69,8 +72,8 @@ describe("DialogoLoginComponent", () => {
       throwError(() => new Error("Credenciais inválidas")),
     );
     componente.formulario.setValue({
-      email: "admin.demo@email.com",
-      senha: "admin9090@",
+      email: "cliente.demo@email.com",
+      senha: "cliente9090@",
     });
 
     componente.entrar();

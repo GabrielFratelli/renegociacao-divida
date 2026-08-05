@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable, computed, inject, signal } from "@angular/core";
-import { tap } from "rxjs";
+import { Observable, tap } from "rxjs";
 import { ambiente } from "../../../environment";
 
 interface RespostaLogin {
@@ -8,7 +8,7 @@ interface RespostaLogin {
   usuario: { id: string; nome: string; email: string };
 }
 
-interface Sessao extends RespostaLogin {}
+type Sessao = RespostaLogin;
 
 @Injectable({ providedIn: "root" })
 export class AutenticacaoService {
@@ -20,7 +20,11 @@ export class AutenticacaoService {
   readonly token = computed(() => this.sessaoInterna()?.token ?? null);
   readonly autenticado = computed(() => this.token() !== null);
 
-  autenticar(email: string, senha: string) {
+  constructor() {
+    this.restaurarSessao();
+  }
+
+  autenticar(email: string, senha: string): Observable<RespostaLogin> {
     return this.http
       .post<RespostaLogin>(`${ambiente.apiUrl}/auth/login`, { email, senha })
       .pipe(tap((resposta) => this.gravarSessao(resposta)));
@@ -30,9 +34,12 @@ export class AutenticacaoService {
     const armazenada = sessionStorage.getItem(this.chaveSessao);
     if (!armazenada) return;
     try {
-      this.sessaoInterna.set(JSON.parse(armazenada) as Sessao);
+      const sessao: unknown = JSON.parse(armazenada);
+      if (!this.ehSessaoValida(sessao)) throw new Error("Sessão inválida");
+      this.sessaoInterna.set(sessao);
     } catch {
       sessionStorage.removeItem(this.chaveSessao);
+      this.sessaoInterna.set(null);
     }
   }
 
@@ -44,5 +51,21 @@ export class AutenticacaoService {
   private gravarSessao(sessao: Sessao): void {
     sessionStorage.setItem(this.chaveSessao, JSON.stringify(sessao));
     this.sessaoInterna.set(sessao);
+  }
+
+  private ehSessaoValida(valor: unknown): valor is Sessao {
+    if (!valor || typeof valor !== "object") return false;
+    const sessao = valor as Record<string, unknown>;
+    const usuario = sessao["usuario"];
+    if (!usuario || typeof usuario !== "object") return false;
+    const dadosUsuario = usuario as Record<string, unknown>;
+
+    return (
+      typeof sessao["token"] === "string" &&
+      sessao["token"].length > 0 &&
+      typeof dadosUsuario["id"] === "string" &&
+      typeof dadosUsuario["nome"] === "string" &&
+      typeof dadosUsuario["email"] === "string"
+    );
   }
 }

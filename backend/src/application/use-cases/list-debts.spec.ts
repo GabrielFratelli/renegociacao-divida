@@ -2,10 +2,7 @@ import { Divida } from "../../domain/entities/debt.js";
 import { RepositorioDividasMemoria } from "../../infrastructure/repositories/in-memory-debts-repository.js";
 import { ListarDividas } from "./list-debts.js";
 
-const criarDivida = (
-  id: string,
-  status: Divida["status"],
-): Divida => ({
+const criarDivida = (id: string, status: Divida["status"]): Divida => ({
   id,
   clienteId: "cliente-001",
   credor: `Credor ${id}`,

@@ -1,6 +1,5 @@
 import { TestBed } from "@angular/core/testing";
 import { signal } from "@angular/core";
-import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { Router } from "@angular/router";
 import { AutenticacaoService } from "../../core/authentication/services/autenticacao.service";
 import { Divida } from "../../core/models/debt.model";
@@ -28,7 +27,7 @@ describe("ListaDividasComponent", () => {
     roteador.navigate.mockClear();
 
     await TestBed.configureTestingModule({
-      imports: [ListaDividasComponent, NoopAnimationsModule],
+      imports: [ListaDividasComponent],
       providers: [
         { provide: DividasService, useValue: dividas },
         { provide: AutenticacaoService, useValue: autenticacao },

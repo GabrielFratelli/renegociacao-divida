@@ -1,12 +1,15 @@
 module.exports = {
-  preset: 'jest-preset-angular',
-  setupFilesAfterEnv: ['<rootDir>/setup-jest.ts'],
-  testEnvironment: 'jsdom',
-  moduleFileExtensions: ['ts', 'html', 'js', 'json'],
+  preset: "jest-preset-angular",
+  setupFilesAfterEnv: ["<rootDir>/setup-jest.ts"],
+  testEnvironment: "jsdom",
+  moduleFileExtensions: ["ts", "html", "js", "json"],
   transform: {
-    '^.+\\.(ts|mjs|js|html)$': ['jest-preset-angular', {
-      tsconfig: '<rootDir>/tsconfig.spec.json',
-      stringifyContentPathRegex: '\\.(html|svg)$'
-    }]
-  }
+    "^.+\\.(ts|mjs|js|html)$": [
+      "jest-preset-angular",
+      {
+        tsconfig: "<rootDir>/tsconfig.spec.json",
+        stringifyContentPathRegex: "\\.(html|svg)$",
+      },
+    ],
+  },
 };

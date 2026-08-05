@@ -1,4 +1,5 @@
 import { Routes } from "@angular/router";
+import { protegerSimulacao } from "./core/authentication/authentication.guard";
 
 export const rotas: Routes = [
   {
@@ -10,6 +11,7 @@ export const rotas: Routes = [
   },
   {
     path: "simular",
+    canActivate: [protegerSimulacao],
     loadComponent: () =>
       import("./features/propostas/propostas.component").then(
         (m) => m.SimuladorPropostaComponent,

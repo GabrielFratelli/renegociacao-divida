@@ -4,7 +4,7 @@
     routerLink="/dividas"
     aria-label="Início do Portal de Renegociação"
   >
-    <mat-icon aria-hidden="true">handshake</mat-icon>
+    <img src="favicon.svg" alt="" width="22" height="22" />
     <span>Portal de Renegociação</span>
   </a>
 
@@ -21,7 +21,7 @@
 
   @if (autenticacao.usuario(); as usuario) {
     <span class="saudacao">Olá, {{ usuario.nome }}</span>
-    <button mat-button (click)="autenticacao.sair()">Sair</button>
+    <button mat-button (click)="sair()">Sair</button>
   } @else {
     <button mat-button (click)="abrirLogin()">Entrar</button>
   }

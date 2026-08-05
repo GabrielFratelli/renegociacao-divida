@@ -40,4 +40,25 @@ describe("DividasService", () => {
     expect(servico.dividas()).toHaveLength(1);
     expect(servico.dividas()[0].credor).toBe("Itaú Unibanco");
   });
+
+  it("remove dados sensíveis e reinicia o estado", () => {
+    servico.dividas.set([
+      {
+        id: "d-1",
+        credor: "Itaú Unibanco",
+        descricao: "Cartão",
+        valorOriginal: 500,
+        vencimento: "2026-05-10",
+        status: "ATRASADA",
+      },
+    ]);
+    servico.solicitado.set(true);
+    servico.erro.set("erro anterior");
+
+    servico.limpar();
+
+    expect(servico.dividas()).toEqual([]);
+    expect(servico.solicitado()).toBe(false);
+    expect(servico.erro()).toBeNull();
+  });
 });

@@ -165,7 +165,7 @@ export class SimuladorPropostaComponent {
         next: () => {
           this.aceiteConcluido.set(true);
           this.dividas.carregar();
-          this.roteador.navigate(["/dividas"]);
+          void this.roteador.navigate(["/dividas"]);
         },
         error: () =>
           this.erroAceite.set(
