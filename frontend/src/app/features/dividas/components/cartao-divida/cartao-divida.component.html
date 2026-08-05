@@ -1,0 +1,100 @@
+<mat-card [class.em-acordo]="emAcordo()" [class.nao-acordo]="!emAcordo()">
+  <mat-card-header>
+    <mat-card-title>{{ divida().credor }}</mat-card-title>
+    <mat-card-subtitle>{{ divida().descricao }}</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <span class="rotulo">{{
+      emAcordo() ? "Saldo devedor" : "Valor pendente"
+    }}</span>
+    <strong>{{ valorEmAberto() | currency: "BRL" }}</strong>
+
+    @if (emAcordo()) {
+      <div class="detalhes-acordo">
+        @if (
+          divida().quantidadeParcelas && divida().valorParcela !== undefined
+        ) {
+          <span class="rotulo">Plano contratado</span>
+          @if (temAjusteNaUltimaParcela()) {
+            <p>
+              {{ (divida().quantidadeParcelas ?? 1) - 1 }}x de
+              {{ divida().valorParcela | currency: "BRL" }} + última de
+              {{ divida().valorUltimaParcela | currency: "BRL" }}
+            </p>
+          } @else {
+            <p>
+              {{ divida().quantidadeParcelas }}x de
+              {{ divida().valorParcela | currency: "BRL" }}
+            </p>
+          }
+        }
+      </div>
+    }
+
+    <div class="rodape-card">
+      <dl>
+        @if (emAcordo()) {
+          <div>
+            <dt>Próxima parcela</dt>
+            <dd>
+              @if (divida().valorParcela !== undefined) {
+                {{ divida().valorParcela | currency: "BRL" }}
+              } @else {
+                —
+              }
+            </dd>
+          </div>
+          <div>
+            <dt>Próximo vencimento</dt>
+            <dd>
+              @if (divida().proximoVencimento) {
+                {{ divida().proximoVencimento | date: "dd/MM/yyyy" }}
+              } @else {
+                —
+              }
+            </dd>
+          </div>
+        } @else {
+          <div>
+            <dt>Vencimento</dt>
+            <dd>{{ divida().vencimento | date: "dd/MM/yyyy" }}</dd>
+          </div>
+        }
+        <div>
+          <dt>Status</dt>
+          <dd>
+            <mat-chip
+              [class.atrasada]="divida().status === 'ATRASADA'"
+              [class.acordo]="emAcordo()"
+            >
+              @switch (divida().status) {
+                @case ("ATRASADA") {
+                  Em atraso
+                }
+                @case ("EM_ACORDO") {
+                  Em acordo
+                }
+                @default {
+                  A vencer
+                }
+              }
+            </mat-chip>
+          </dd>
+        </div>
+      </dl>
+
+      @if (!emAcordo()) {
+        <mat-card-actions align="start">
+          <button
+            mat-flat-button
+            color="primary"
+            (click)="simular.emit(divida())"
+          >
+            Simular acordo
+          </button>
+        </mat-card-actions>
+      }
+    </div>
+  </mat-card-content>
+</mat-card>
