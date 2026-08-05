@@ -1,5 +1,33 @@
 # Renegociação de Dívidas
 
+<!-- Evidências do site: visualização rápida sem rodar -->
+
+**Evidências — Web**
+
+<p align="center">
+  <img src="frontend/src/app/assets/image/web/login.png" alt="login" width="220" />
+  <img src="frontend/src/app/assets/image/web/sem-divida.png" alt="sem-divida" width="220" />
+  <img src="frontend/src/app/assets/image/web/dividas.png" alt="dividas" width="220" />
+  <img src="frontend/src/app/assets/image/web/dividas-acordo.png" alt="dividas-acordo" width="220" />
+  <img src="frontend/src/app/assets/image/web/proposta.png" alt="proposta" width="220" />
+  <img src="frontend/src/app/assets/image/web/proposta-simulacao.png" alt="proposta-simulacao" width="220" />
+  <img src="frontend/src/app/assets/image/web/simulacao-avista.png" alt="simulacao-avista" width="220" />
+  <img src="frontend/src/app/assets/image/web/simulacao-parcelado.png" alt="simulacao-parcelado" width="220" />
+  <img src="frontend/src/app/assets/image/web/sem-login.png" alt="sem-login" width="220" />
+</p>
+
+**Evidências — Mobile**
+
+<p align="center">
+  <img src="frontend/src/app/assets/image/mobile/login-mobile.png" alt="login-mobile" width="160" />
+  <img src="frontend/src/app/assets/image/mobile/sem-divida-mobile.png" alt="sem-divida-mobile" width="160" />
+  <img src="frontend/src/app/assets/image/mobile/dividas-mobile.png" alt="dividas-mobile" width="160" />
+  <img src="frontend/src/app/assets/image/mobile/divida-acordo-mobile.png" alt="divida-acordo-mobile" width="160" />
+  <img src="frontend/src/app/assets/image/mobile/simulacao-mobile.png" alt="simulacao-mobile" width="160" />
+  <img src="frontend/src/app/assets/image/mobile/acordo-mobile.png" alt="acordo-mobile" width="160" />
+  <img src="frontend/src/app/assets/image/mobile/sem-login-mobile.png" alt="sem-login-mobile" width="160" />
+</p>
+
 Protótipo full stack para visualização, simulação, aceite e contratação de renegociação de dívidas. A experiência do cliente contém duas telas: **Dívidas** e **Simular proposta**. Na tela de simulação, o cliente calcula as condições, revisa a proposta gerada e confirma explicitamente o aceite antes da criação do acordo. A autenticação é realizada por um diálogo de acesso, evitando introduzir uma terceira tela.
 
 ## Fluxo de negociação
