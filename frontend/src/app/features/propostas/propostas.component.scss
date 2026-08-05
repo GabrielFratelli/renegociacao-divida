@@ -1,0 +1,200 @@
+section {
+  h2 {
+    font-size: 1.2rem;
+  }
+
+  p {
+    color: #526070;
+    margin: 0;
+  }
+
+  header {
+    margin: 1rem 0 2rem;
+
+    .sobretitulo {
+      color: var(--cor-principal);
+      font-weight: 600;
+    }
+
+    h1 {
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      margin: 0.15rem 0 0.5rem;
+    }
+  }
+
+  .grade-simulacao {
+    align-items: start;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: minmax(250px, 0.8fr) minmax(350px, 1.2fr);
+
+    mat-card {
+      mat-card-content {
+        padding-top: 1rem;
+
+        form {
+          .opcoes-pagamento {
+            display: grid;
+            gap: 0.9rem;
+            margin: 1rem 0;
+
+            mat-radio-button {
+              small {
+                color: #526070;
+                margin-left: 0.5rem;
+              }
+            }
+          }
+
+          mat-form-field {
+            display: block;
+            width: 100%;
+          }
+
+          .erro {
+            color: #b3261e;
+            margin-bottom: 1rem;
+          }
+
+          button {
+            mat-spinner {
+              display: inline-block;
+            }
+          }
+        }
+      }
+
+      &.resumo-divida {
+        grid-row: span 2;
+
+        mat-card-content {
+          span {
+            color: #526070;
+            display: block;
+          }
+
+          strong {
+            display: block;
+            font-size: 1.8rem;
+            margin: 0.25rem 0 1rem;
+          }
+        }
+      }
+
+      &.resultado {
+        grid-column: 2;
+
+        mat-card-content {
+          .valores {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(3, 1fr);
+            margin-bottom: 1.5rem;
+
+            span {
+              color: #526070;
+              display: grid;
+              gap: 0.25rem;
+
+              b,
+              strong {
+                color: #172033;
+                font-size: 1.1rem;
+              }
+
+              b.positivo {
+                color: #19713b;
+              }
+            }
+          }
+
+          .destaque-parcela {
+            display: grid;
+            font-size: 1.35rem;
+            gap: 0.2rem;
+
+            strong {
+              font-size: 1.65rem;
+            }
+
+            small {
+              color: #526070;
+              display: grid;
+              gap: 0.25rem;
+            }
+
+            .ultima-parcela {
+              align-items: baseline;
+              display: flex;
+              gap: 0.35rem;
+            }
+          }
+
+          .acoes-proposta {
+            border-top: 1px solid #dfe3e8;
+            margin-top: 1.5rem;
+            padding-top: 1.25rem;
+
+            .erro {
+              color: #b3261e;
+              margin-bottom: 1rem;
+            }
+
+            .confirmacao-aceite {
+              background: #f5f7fb;
+              border-radius: 10px;
+              padding: 1rem;
+
+              h3 {
+                font-size: 1rem;
+                margin: 0 0 0.4rem;
+              }
+
+              .botoes-confirmacao {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+                margin-top: 1rem;
+              }
+            }
+
+            mat-spinner {
+              display: inline-block;
+            }
+          }
+        }
+      }
+    }
+
+    @media (max-width: 760px) {
+      grid-template-columns: 1fr;
+
+      mat-card {
+        &.resultado {
+          grid-column: auto;
+
+          mat-card-content {
+            .valores {
+              grid-template-columns: 1fr;
+            }
+          }
+        }
+
+        &.resumo-divida {
+          grid-row: auto;
+        }
+      }
+    }
+  }
+
+  .sem-divida {
+    align-content: center;
+    background: #fff;
+    border-radius: 12px;
+    display: grid;
+    gap: 1rem;
+    justify-items: center;
+    min-height: 240px;
+    text-align: center;
+  }
+}

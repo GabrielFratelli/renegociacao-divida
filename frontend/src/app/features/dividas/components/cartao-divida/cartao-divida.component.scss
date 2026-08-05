@@ -1,0 +1,80 @@
+mat-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-top: 3px solid #ff6200;
+
+  &.nao-acordo {
+    min-height: 320px;
+  }
+
+  &.em-acordo {
+    border-top: 3px solid #19713b;
+  }
+
+  mat-card-content {
+    flex: 1;
+    padding-top: 1rem;
+
+    .rotulo {
+      color: #5f6368;
+      font-size: 0.875rem;
+    }
+
+    strong {
+      display: block;
+      font-size: 1.55rem;
+      margin-block: 0.15rem 1rem;
+    }
+
+    .detalhes-acordo {
+      background: #f5f7fb;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      padding: 0.75rem;
+
+      p {
+        margin: 0.2rem 0 0;
+      }
+    }
+
+    .rodape-card {
+      dl {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: space-between;
+        margin: 0;
+
+        div {
+          dt {
+            color: #5f6368;
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+          }
+
+          dd {
+            margin: 0;
+
+            mat-chip {
+              &.atrasada {
+                --mdc-chip-elevated-container-color: #fee9e7;
+                --mdc-chip-label-text-color: #8c1d18;
+              }
+
+              &.acordo {
+                --mdc-chip-elevated-container-color: #e2f3e8;
+                --mdc-chip-label-text-color: #155c32;
+              }
+            }
+          }
+        }
+      }
+
+      ::ng-deep .mat-mdc-card-actions {
+        padding: 0 !important;
+      }
+    }
+  }
+}
