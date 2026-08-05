@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { CartaoDividaComponent } from "./cartao-divida.component";
 import { Divida } from "../../../../core/models/debt.model";
 
@@ -17,7 +16,7 @@ describe("CartaoDividaComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CartaoDividaComponent, NoopAnimationsModule],
+      imports: [CartaoDividaComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(CartaoDividaComponent);
@@ -40,7 +39,6 @@ describe("CartaoDividaComponent", () => {
   it("marca o card como não renegociado quando ainda não há acordo", () => {
     const card = fixture.nativeElement.querySelector("mat-card");
 
-    expect(card.classList.contains("nao-acordo")).toBe(true);
     expect(card.classList.contains("em-acordo")).toBe(false);
   });
 

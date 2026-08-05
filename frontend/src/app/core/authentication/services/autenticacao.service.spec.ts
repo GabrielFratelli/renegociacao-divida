@@ -81,6 +81,18 @@ describe("AutenticacaoService", () => {
     expect(sessionStorage.getItem("sessao-renegociacao")).toBeNull();
   });
 
+  it("remove a sessão cujo JSON não possui o contrato esperado", () => {
+    sessionStorage.setItem(
+      "sessao-renegociacao",
+      JSON.stringify({ token: "token-sem-usuario" }),
+    );
+
+    servico.restaurarSessao();
+
+    expect(servico.autenticado()).toBe(false);
+    expect(sessionStorage.getItem("sessao-renegociacao")).toBeNull();
+  });
+
   it("limpa a sessão e remove os dados do storage ao sair", () => {
     sessionStorage.setItem(
       "sessao-renegociacao",

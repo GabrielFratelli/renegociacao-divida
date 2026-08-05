@@ -27,4 +27,11 @@ export class DividasService {
           ),
       });
   }
+
+  limpar(): void {
+    this.dividas.set([]);
+    this.carregando.set(false);
+    this.erro.set(null);
+    this.solicitado.set(false);
+  }
 }

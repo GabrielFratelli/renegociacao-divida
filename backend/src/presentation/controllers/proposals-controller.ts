@@ -7,6 +7,7 @@ import {
   PropostaNaoEncontradaError,
 } from "../../application/use-cases/accept-proposal.js";
 import {
+  DataPrimeiroVencimentoInvalidaError,
   DividaInelegivelParaSimulacaoError,
   DividaNaoEncontradaError,
   SimularProposta,
@@ -44,12 +45,10 @@ export class ControladorPropostas {
   ): Promise<void> => {
     const dados = esquemaSimulacao.safeParse(requisicao.body);
     if (!dados.success) {
-      resposta
-        .status(400)
-        .json({
-          mensagem: "Parâmetros de simulação inválidos.",
-          detalhes: dados.error.flatten(),
-        });
+      resposta.status(400).json({
+        mensagem: "Parâmetros de simulação inválidos.",
+        detalhes: dados.error.flatten(),
+      });
       return;
     }
     try {
@@ -59,6 +58,10 @@ export class ControladorPropostas {
       );
       resposta.json(proposta);
     } catch (erro) {
+      if (erro instanceof DataPrimeiroVencimentoInvalidaError) {
+        resposta.status(400).json({ mensagem: erro.message });
+        return;
+      }
       if (erro instanceof DividaNaoEncontradaError) {
         resposta.status(404).json({ mensagem: erro.message });
         return;
