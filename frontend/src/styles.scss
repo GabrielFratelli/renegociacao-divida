@@ -1,3 +1,8 @@
+@import "@fontsource/roboto/latin-300.css";
+@import "@fontsource/roboto/latin-400.css";
+@import "@fontsource/roboto/latin-500.css";
+@import "@fontsource/roboto/latin-700.css";
+
 :root {
   --cor-principal: #ff6200;
   --mat-sys-primary: var(--cor-principal);
@@ -20,10 +25,11 @@ body {
   margin: 0;
   background: #f7f9fc;
   color: #172033;
-  font-family: Roboto, Arial, sans-serif;
+  font-family: Roboto, "Segoe UI", Arial, sans-serif;
 }
 button,
 input,
-select {
+select,
+textarea {
   font: inherit;
 }

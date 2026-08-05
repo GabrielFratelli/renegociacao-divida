@@ -1,16 +1,22 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  effect,
   OnInit,
   inject,
 } from "@angular/core";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatButtonModule } from "@angular/material/button";
-import { MatIconModule } from "@angular/material/icon";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
-import { RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
+import {
+  Router,
+  RouterLink,
+  RouterLinkActive,
+  RouterOutlet,
+} from "@angular/router";
 import { AutenticacaoService } from "./core/authentication/services/autenticacao.service";
 import { DialogoLoginComponent } from "./core/authentication/components/dialogo-login/dialogo-login.component";
+import { DividasService } from "./shared/services/dividas/dividas.service";
 
 @Component({
   selector: "app-root",
@@ -20,7 +26,6 @@ import { DialogoLoginComponent } from "./core/authentication/components/dialogo-
     RouterLinkActive,
     MatToolbarModule,
     MatButtonModule,
-    MatIconModule,
     MatDialogModule,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -30,17 +35,35 @@ import { DialogoLoginComponent } from "./core/authentication/components/dialogo-
 export class AppComponent implements OnInit {
   readonly autenticacao = inject(AutenticacaoService);
   private readonly dialogo = inject(MatDialog);
+  private readonly dividas = inject(DividasService);
+  private readonly roteador = inject(Router);
+
+  constructor() {
+    effect(() => {
+      if (this.autenticacao.autenticado()) return;
+      this.dividas.limpar();
+      if (this.roteador.url.startsWith("/simular")) {
+        void this.roteador.navigate(["/dividas"]);
+      }
+    });
+  }
 
   ngOnInit(): void {
-    this.autenticacao.restaurarSessao();
     if (!this.autenticacao.autenticado()) this.abrirLogin();
   }
 
   abrirLogin(): void {
+    if (this.dialogo.openDialogs.length > 0) return;
     this.dialogo.open(DialogoLoginComponent, {
       disableClose: true,
-      width: "420px",
+      width: "460px",
+      maxWidth: "calc(100vw - 2rem)",
       autoFocus: "dialog",
     });
+  }
+
+  sair(): void {
+    this.autenticacao.sair();
+    void this.roteador.navigate(["/dividas"]);
   }
 }
