@@ -28,7 +28,7 @@
   <img src="frontend/src/app/assets/image/mobile/sem-login-mobile.png" alt="sem-login-mobile" width="160" />
 </p>
 
-Protótipo full stack para visualização, simulação, aceite e contratação de renegociação de dívidas. A experiência do cliente contém duas telas: **Dívidas** e **Simular proposta**. Na tela de simulação, o cliente calcula as condições, revisa a proposta gerada e confirma explicitamente o aceite antes da criação do acordo. A autenticação é realizada por um diálogo de acesso, evitando introduzir uma terceira tela.
+Projeto para visualização, simulação, aceite e contratação de renegociação de dívidas. A experiência do cliente contém duas telas: **Dívidas** e **Simular proposta**. Na tela de simulação, o cliente calcula as condições, revisa a proposta gerada e confirma explicitamente o aceite antes da criação do acordo. A autenticação é realizada por um diálogo de acesso, evitando introduzir uma terceira tela.
 
 ## Fluxo de negociação
 
