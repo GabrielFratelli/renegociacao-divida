@@ -16,7 +16,7 @@
           divida().quantidadeParcelas && divida().valorParcela !== undefined
         ) {
           <span class="rotulo">Plano contratado</span>
-          @if (temAjusteNaUltimaParcela()) {
+          @if (ajusteNaUltimaParcela()) {
             <p>
               {{ (divida().quantidadeParcelas ?? 1) - 1 }}x de
               {{ divida().valorParcela | currency: "BRL" }} + última de

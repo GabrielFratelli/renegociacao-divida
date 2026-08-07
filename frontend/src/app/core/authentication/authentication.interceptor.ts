@@ -22,7 +22,7 @@ export const interceptorAutenticacao: HttpInterceptorFn = (
         erro.status === 401 &&
         !autenticando
       ) {
-        autenticacao.sair();
+        autenticacao.sairDaConta();
       }
       return throwError(() => erro);
     }),

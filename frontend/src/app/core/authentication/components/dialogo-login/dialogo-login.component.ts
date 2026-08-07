@@ -45,7 +45,7 @@ export class DialogoLoginComponent {
     this.erro.set(null);
     const { email, senha } = this.formulario.getRawValue();
     this.autenticacao
-      .autenticar(email, senha)
+      .autenticarConta(email, senha)
       .pipe(finalize(() => this.carregando.set(false)))
       .subscribe({
         next: () => this.referencia.close(),

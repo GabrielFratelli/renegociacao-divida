@@ -1,13 +1,13 @@
-export type TipoPagamento = "A_VISTA" | "PARCELADO";
+export type TTipoPagamento = "A_VISTA" | "PARCELADO";
 
-export interface DadosSimulacao {
+export interface IDadosSimulacao {
   dividaId: string;
-  tipoPagamento: TipoPagamento;
+  tipoPagamento: TTipoPagamento;
   quantidadeParcelas?: number;
   dataPrimeiroVencimento: string;
 }
 
-export interface PropostaSimulada {
+export interface IPropostaSimulada {
   id: string;
   dividaId: string;
   valorOriginal: number;
@@ -21,7 +21,7 @@ export interface PropostaSimulada {
   mensagem: string;
 }
 
-export interface Acordo {
+export interface IAcordo {
   id: string;
   propostaId: string;
   dividaId: string;

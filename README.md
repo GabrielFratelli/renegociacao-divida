@@ -88,7 +88,6 @@ flowchart TB
 renegociacao-dividas/
 ├── frontend/       # Angular standalone, Signals, Material e Jest
 ├── backend/        # BFF Node.js/TypeScript em camadas SOLID
-└── docs/           # Roteiro de apresentação e decisões do projeto
 ```
 
 Os nomes de domínio e das pastas criadas para o produto estão em português; arquivos estruturais convencionais do Angular permanecem com seus nomes padrão.

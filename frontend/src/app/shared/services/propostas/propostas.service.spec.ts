@@ -5,7 +5,7 @@ import {
   provideHttpClientTesting,
 } from "@angular/common/http/testing";
 import { PropostasService } from "./propostas.service";
-import { ambiente } from "../../../environment";
+import { environment } from "../../../environment";
 
 describe("PropostasService", () => {
   let servico: PropostasService;
@@ -23,7 +23,7 @@ describe("PropostasService", () => {
 
   it("deve enviar os parâmetros da simulação ao BFF", () => {
     servico
-      .simular({
+      .simularDivida({
         dividaId: "d-1",
         tipoPagamento: "PARCELADO",
         quantidadeParcelas: 6,
@@ -32,7 +32,7 @@ describe("PropostasService", () => {
       .subscribe((proposta) => {
         expect(proposta.valorParcela).toBe(150);
       });
-    const requisicao = http.expectOne(`${ambiente.apiUrl}/propostas/simular`);
+    const requisicao = http.expectOne(`${environment.apiUrl}/propostas/simular`);
     expect(requisicao.request.method).toBe("POST");
     expect(requisicao.request.body.quantidadeParcelas).toBe(6);
     requisicao.flush({
@@ -51,13 +51,13 @@ describe("PropostasService", () => {
   });
 
   it("deve aceitar a proposta pelo identificador", () => {
-    servico.aceitar("p-1/especial").subscribe((acordo) => {
+    servico.aceitarProposta("p-1/especial").subscribe((acordo) => {
       expect(acordo.status).toBe("ATIVO");
       expect(acordo.valorNegociado).toBe(900);
     });
 
     const requisicao = http.expectOne(
-      `${ambiente.apiUrl}/propostas/p-1%2Fespecial/aceitar`,
+      `${environment.apiUrl}/propostas/p-1%2Fespecial/aceitar`,
     );
     expect(requisicao.request.method).toBe("POST");
     expect(requisicao.request.body).toEqual({});

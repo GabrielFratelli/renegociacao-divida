@@ -1,20 +1,14 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable, computed, inject, signal } from "@angular/core";
 import { Observable, tap } from "rxjs";
-import { ambiente } from "../../../environment";
-
-interface RespostaLogin {
-  token: string;
-  usuario: { id: string; nome: string; email: string };
-}
-
-type Sessao = RespostaLogin;
+import { environment } from "../../../environment";
+import { TSessao, IRespostaLogin } from "../../models/autenticacao.model";
 
 @Injectable({ providedIn: "root" })
 export class AutenticacaoService {
   private readonly http = inject(HttpClient);
   private readonly chaveSessao = "sessao-renegociacao";
-  private readonly sessaoInterna = signal<Sessao | null>(null);
+  private readonly sessaoInterna = signal<TSessao | null>(null);
 
   readonly usuario = computed(() => this.sessaoInterna()?.usuario ?? null);
   readonly token = computed(() => this.sessaoInterna()?.token ?? null);
@@ -24,9 +18,9 @@ export class AutenticacaoService {
     this.restaurarSessao();
   }
 
-  autenticar(email: string, senha: string): Observable<RespostaLogin> {
+  autenticarConta(email: string, senha: string): Observable<IRespostaLogin> {
     return this.http
-      .post<RespostaLogin>(`${ambiente.apiUrl}/auth/login`, { email, senha })
+      .post<IRespostaLogin>(`${environment.apiUrl}/auth/login`, { email, senha })
       .pipe(tap((resposta) => this.gravarSessao(resposta)));
   }
 
@@ -43,17 +37,17 @@ export class AutenticacaoService {
     }
   }
 
-  sair(): void {
+  sairDaConta(): void {
     sessionStorage.removeItem(this.chaveSessao);
     this.sessaoInterna.set(null);
   }
 
-  private gravarSessao(sessao: Sessao): void {
+  private gravarSessao(sessao: TSessao): void {
     sessionStorage.setItem(this.chaveSessao, JSON.stringify(sessao));
     this.sessaoInterna.set(sessao);
   }
 
-  private ehSessaoValida(valor: unknown): valor is Sessao {
+  private ehSessaoValida(valor: unknown): valor is TSessao {
     if (!valor || typeof valor !== "object") return false;
     const sessao = valor as Record<string, unknown>;
     const usuario = sessao["usuario"];

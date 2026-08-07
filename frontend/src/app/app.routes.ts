@@ -1,5 +1,6 @@
 import { Routes } from "@angular/router";
-import { protegerSimulacao } from "./core/authentication/authentication.guard";
+import { protegerSimulacao } from "./core/authentication/guards/authentication.guard";
+
 
 export const rotas: Routes = [
   {
