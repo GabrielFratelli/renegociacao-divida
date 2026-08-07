@@ -2,14 +2,15 @@ import { signal } from "@angular/core";
 import { TestBed } from "@angular/core/testing";
 import { ActivatedRoute, Router, convertToParamMap } from "@angular/router";
 import { Subject, of, throwError } from "rxjs";
-import { Divida } from "../../core/models/debt.model";
-import { Acordo, PropostaSimulada } from "../../core/models/proposal.model";
+
 import { DividasService } from "../../shared/services/dividas/dividas.service";
 import { PropostasService } from "../../shared/services/propostas/propostas.service";
 import { SimuladorPropostaComponent } from "./propostas.component";
+import { IDivida } from "../../core/models/debt.model";
+import { IAcordo, IPropostaSimulada } from "../../core/models/proposal.model";
 
 describe("SimuladorPropostaComponent", () => {
-  const divida: Divida = {
+  const divida: IDivida = {
     id: "d-1",
     credor: "Itaú Unibanco",
     descricao: "Cartão",
@@ -17,7 +18,7 @@ describe("SimuladorPropostaComponent", () => {
     vencimento: "2026-05-10",
     status: "ATRASADA",
   };
-  const proposta: PropostaSimulada = {
+  const proposta: IPropostaSimulada = {
     id: "p-1",
     dividaId: "d-1",
     valorOriginal: 1000,
@@ -30,7 +31,7 @@ describe("SimuladorPropostaComponent", () => {
     expiraEm: "2026-08-03T15:00:00.000Z",
     mensagem: "Proposta válida",
   };
-  const acordo: Acordo = {
+  const acordo: IAcordo = {
     id: "a-1",
     propostaId: "p-1",
     dividaId: "d-1",
@@ -46,7 +47,7 @@ describe("SimuladorPropostaComponent", () => {
     aceitoEm: "2026-08-03T12:00:00.000Z",
   };
   const dividas = {
-    dividas: signal<Divida[]>([divida]),
+    dividas: signal<IDivida[]>([divida]),
     carregar: jest.fn(),
   };
   const propostas = { simular: jest.fn(), aceitar: jest.fn() };
@@ -112,7 +113,7 @@ describe("SimuladorPropostaComponent", () => {
   });
 
   it("exige confirmação, aceita uma única vez e atualiza as dívidas", () => {
-    const resposta = new Subject<Acordo>();
+    const resposta = new Subject<IAcordo>();
     propostas.aceitar.mockReturnValue(resposta.asObservable());
     const componente = TestBed.createComponent(
       SimuladorPropostaComponent,

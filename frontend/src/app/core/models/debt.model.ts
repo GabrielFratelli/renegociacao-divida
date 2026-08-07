@@ -1,12 +1,12 @@
-export type StatusDivida = "ATRASADA" | "A_VENCER" | "EM_ACORDO";
+export type TStatusDivida = "ATRASADA" | "A_VENCER" | "EM_ACORDO";
 
-export interface Divida {
+export interface IDivida {
   id: string;
   credor: string;
   descricao: string;
   valorOriginal: number;
   vencimento: string;
-  status: StatusDivida;
+  status: TStatusDivida;
   valorNegociado?: number;
   saldoDevedor?: number;
   quantidadeParcelas?: number;

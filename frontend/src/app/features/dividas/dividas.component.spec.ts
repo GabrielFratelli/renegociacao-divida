@@ -2,17 +2,18 @@ import { TestBed } from "@angular/core/testing";
 import { signal } from "@angular/core";
 import { Router } from "@angular/router";
 import { AutenticacaoService } from "../../core/authentication/services/autenticacao.service";
-import { Divida } from "../../core/models/debt.model";
+
 import { DividasService } from "../../shared/services/dividas/dividas.service";
 import { ListaDividasComponent } from "./dividas.component";
+import { IDivida } from "../../core/models/debt.model";
 
 describe("ListaDividasComponent", () => {
   const dividas = {
-    dividas: signal<Divida[]>([]),
+    dividas: signal<IDivida[]>([]),
     carregando: signal(false),
     erro: signal<string | null>(null),
     solicitado: signal(false),
-    carregar: jest.fn(),
+    carregarDividas: jest.fn(),
   };
   const autenticacao = { autenticado: signal(false) };
   const roteador = { navigate: jest.fn() };
@@ -22,7 +23,7 @@ describe("ListaDividasComponent", () => {
     dividas.carregando.set(false);
     dividas.erro.set(null);
     dividas.solicitado.set(false);
-    dividas.carregar.mockClear();
+    dividas.carregarDividas.mockClear();
     autenticacao.autenticado.set(false);
     roteador.navigate.mockClear();
 
@@ -40,7 +41,7 @@ describe("ListaDividasComponent", () => {
     const componente = TestBed.createComponent(
       ListaDividasComponent,
     ).componentInstance;
-    const divida: Divida = {
+    const divida: IDivida = {
       id: "d-1",
       credor: "Itaú Unibanco",
       descricao: "Cartão",

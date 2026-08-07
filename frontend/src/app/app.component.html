@@ -21,9 +21,9 @@
 
   @if (autenticacao.usuario(); as usuario) {
     <span class="saudacao">Olá, {{ usuario.nome }}</span>
-    <button mat-button (click)="sair()">Sair</button>
+    <button mat-button (click)="sairDaConta()">Sair</button>
   } @else {
-    <button mat-button (click)="abrirLogin()">Entrar</button>
+    <button mat-button (click)="abrirPopUpLogin()">Entrar</button>
   }
 </mat-toolbar>
 

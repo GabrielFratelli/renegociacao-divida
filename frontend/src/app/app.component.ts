@@ -36,23 +36,23 @@ export class AppComponent implements OnInit {
   readonly autenticacao = inject(AutenticacaoService);
   private readonly dialogo = inject(MatDialog);
   private readonly dividas = inject(DividasService);
-  private readonly roteador = inject(Router);
+  private readonly rota = inject(Router);
 
   constructor() {
     effect(() => {
       if (this.autenticacao.autenticado()) return;
-      this.dividas.limpar();
-      if (this.roteador.url.startsWith("/simular")) {
-        void this.roteador.navigate(["/dividas"]);
+      this.dividas.limparConteudoDividas();
+      if (this.rota.url.startsWith("/simular")) {
+        void this.rota.navigate(["/dividas"]);
       }
     });
   }
 
   ngOnInit(): void {
-    if (!this.autenticacao.autenticado()) this.abrirLogin();
+    if (!this.autenticacao.autenticado()) this.abrirPopUpLogin();
   }
 
-  abrirLogin(): void {
+  abrirPopUpLogin(): void {
     if (this.dialogo.openDialogs.length > 0) return;
     this.dialogo.open(DialogoLoginComponent, {
       disableClose: true,
@@ -62,8 +62,8 @@ export class AppComponent implements OnInit {
     });
   }
 
-  sair(): void {
-    this.autenticacao.sair();
-    void this.roteador.navigate(["/dividas"]);
+  sairDaConta(): void {
+    this.autenticacao.sairDaConta();
+    void this.rota.navigate(["/dividas"]);
   }
 }

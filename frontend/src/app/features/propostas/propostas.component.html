@@ -119,7 +119,7 @@
                 >
               </div>
               <div class="destaque-parcela">
-                @if (temAjusteNaUltimaParcela(resultado)) {
+                @if (ajusteNaUltimaParcela(resultado)) {
                   {{ resultado.quantidadeParcelas - 1 }}x de
                   <strong>{{
                     resultado.valorParcela | currency: "BRL"

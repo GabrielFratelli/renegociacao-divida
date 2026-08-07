@@ -5,7 +5,7 @@ import {
   provideHttpClientTesting,
 } from "@angular/common/http/testing";
 import { DividasService } from "./dividas.service";
-import { ambiente } from "../../../environment";
+import { environment } from "../../../environment";
 
 describe("DividasService", () => {
   let servico: DividasService;
@@ -22,8 +22,8 @@ describe("DividasService", () => {
   afterEach(() => http.verify());
 
   it("deve carregar e disponibilizar as dívidas com signal", () => {
-    servico.carregar();
-    const requisicao = http.expectOne(`${ambiente.apiUrl}/dividas`);
+    servico.carregarDividas();
+    const requisicao = http.expectOne(`${environment.apiUrl}/dividas`);
     expect(requisicao.request.method).toBe("GET");
     requisicao.flush([
       {
@@ -55,7 +55,7 @@ describe("DividasService", () => {
     servico.solicitado.set(true);
     servico.erro.set("erro anterior");
 
-    servico.limpar();
+    servico.limparConteudoDividas();
 
     expect(servico.dividas()).toEqual([]);
     expect(servico.solicitado()).toBe(false);

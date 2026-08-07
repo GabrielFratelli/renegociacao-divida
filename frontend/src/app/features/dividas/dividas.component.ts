@@ -8,7 +8,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { Router } from "@angular/router";
 import { AutenticacaoService } from "../../core/authentication/services/autenticacao.service";
-import { Divida } from "../../core/models/debt.model";
+import { IDivida } from "../../core/models/debt.model";
 import { CartaoDividaComponent } from "./components/cartao-divida/cartao-divida.component";
 import { DividasService } from "../../shared/services/dividas/dividas.service";
 
@@ -27,11 +27,11 @@ export class ListaDividasComponent {
   constructor() {
     effect(() => {
       if (this.autenticacao.autenticado() && !this.dividas.solicitado())
-        this.dividas.carregar();
+        this.dividas.carregarDividas();
     });
   }
 
-  abrirSimulacao(divida: Divida): void {
+  abrirSimulacao(divida: IDivida): void {
     if (divida.status === "EM_ACORDO") return;
     this.roteador.navigate(["/simular"], {
       queryParams: { divida: divida.id },

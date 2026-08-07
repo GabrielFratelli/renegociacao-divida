@@ -1,11 +1,11 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { CartaoDividaComponent } from "./cartao-divida.component";
-import { Divida } from "../../../../core/models/debt.model";
+import { IDivida } from "../../../../core/models/debt.model";
 
 describe("CartaoDividaComponent", () => {
   let fixture: ComponentFixture<CartaoDividaComponent>;
   let componente: CartaoDividaComponent;
-  const divida: Divida = {
+  const divida: IDivida = {
     id: "d-1",
     credor: "Itaú Unibanco",
     descricao: "Cartão de crédito",
@@ -53,7 +53,7 @@ describe("CartaoDividaComponent", () => {
       valorUltimaParcela: 250,
       proximoVencimento: "2026-09-10",
       acordoId: "a-1",
-    } satisfies Divida);
+    } satisfies IDivida);
     fixture.detectChanges();
 
     const texto = fixture.nativeElement.textContent.replace(/\s+/g, " ");
@@ -74,7 +74,7 @@ describe("CartaoDividaComponent", () => {
       quantidadeParcelas: 3,
       valorParcela: 33.33,
       valorUltimaParcela: 33.34,
-    } satisfies Divida);
+    } satisfies IDivida);
     fixture.detectChanges();
 
     const texto = fixture.nativeElement.textContent.replace(/\s+/g, " ");

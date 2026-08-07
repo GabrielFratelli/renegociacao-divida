@@ -8,7 +8,7 @@ import { CurrencyPipe, DatePipe } from "@angular/common";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
 import { MatChipsModule } from "@angular/material/chips";
-import { Divida } from "../../../../core/models/debt.model";
+import { IDivida } from "../../../../core/models/debt.model";
 
 @Component({
   selector: "app-cartao-divida",
@@ -24,8 +24,8 @@ import { Divida } from "../../../../core/models/debt.model";
   styleUrl: "./cartao-divida.component.scss",
 })
 export class CartaoDividaComponent {
-  readonly divida = input.required<Divida>();
-  readonly simular = output<Divida>();
+  readonly divida = input.required<IDivida>();
+  readonly simular = output<IDivida>();
 
   emAcordo(): boolean {
     return this.divida().status === "EM_ACORDO";
@@ -37,7 +37,7 @@ export class CartaoDividaComponent {
     return divida.saldoDevedor ?? divida.valorNegociado ?? divida.valorOriginal;
   }
 
-  temAjusteNaUltimaParcela(): boolean {
+  ajusteNaUltimaParcela(): boolean {
     const divida = this.divida();
     return (
       (divida.quantidadeParcelas ?? 0) > 1 &&

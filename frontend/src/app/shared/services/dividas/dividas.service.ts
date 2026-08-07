@@ -1,23 +1,23 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable, inject, signal } from "@angular/core";
 import { finalize } from "rxjs";
-import { ambiente } from "../../../environment";
-import { Divida } from "../../../core/models/debt.model";
+import { environment } from "../../../environment";
+import { IDivida } from "../../../core/models/debt.model";
 
 @Injectable({ providedIn: "root" })
 export class DividasService {
   private readonly http = inject(HttpClient);
-  readonly dividas = signal<Divida[]>([]);
+  readonly dividas = signal<IDivida[]>([]);
   readonly carregando = signal(false);
   readonly erro = signal<string | null>(null);
   readonly solicitado = signal(false);
 
-  carregar(): void {
+  carregarDividas(): void {
     this.solicitado.set(true);
     this.carregando.set(true);
     this.erro.set(null);
     this.http
-      .get<Divida[]>(`${ambiente.apiUrl}/dividas`)
+      .get<IDivida[]>(`${environment.apiUrl}/dividas`)
       .pipe(finalize(() => this.carregando.set(false)))
       .subscribe({
         next: (dividas) => this.dividas.set(dividas),
@@ -28,7 +28,7 @@ export class DividasService {
       });
   }
 
-  limpar(): void {
+  limparConteudoDividas(): void {
     this.dividas.set([]);
     this.carregando.set(false);
     this.erro.set(null);

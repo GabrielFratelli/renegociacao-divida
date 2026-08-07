@@ -20,14 +20,15 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { finalize } from "rxjs";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { Divida } from "../../core/models/debt.model";
-import {
-  DadosSimulacao,
-  PropostaSimulada,
-  TipoPagamento,
-} from "../../core/models/proposal.model";
+// import {
+//   DadosSimulacao,
+//   PropostaSimulada,
+//   TipoPagamento,
+// } from "../../core/models/proposal.model";
 import { DividasService } from "../../shared/services/dividas/dividas.service";
 import { PropostasService } from "../../shared/services/propostas/propostas.service";
+import { IDivida } from "../../core/models/debt.model";
+import { IDadosSimulacao, IPropostaSimulada, TTipoPagamento } from "../../core/models/proposal.model";
 
 @Component({
   selector: "app-simulador-proposta",
@@ -66,15 +67,15 @@ export class SimuladorPropostaComponent {
   readonly erroAceite = signal<string | null>(null);
   readonly confirmandoAceite = signal(false);
   readonly aceiteConcluido = signal(false);
-  readonly proposta = signal<PropostaSimulada | null>(null);
+  readonly proposta = signal<IPropostaSimulada | null>(null);
   readonly idDivida = signal(this.rota.snapshot.queryParamMap.get("divida"));
-  readonly dividaSelecionada = computed<Divida | null>(
+  readonly dividaSelecionada = computed<IDivida | null>(
     () =>
       this.dividas.dividas().find((divida) => divida.id === this.idDivida()) ??
       null,
   );
   readonly formulario = this.construtorFormulario.nonNullable.group({
-    tipoPagamento: ["A_VISTA" as TipoPagamento, Validators.required],
+    tipoPagamento: ["A_VISTA" as TTipoPagamento, Validators.required],
     quantidadeParcelas: [6, [Validators.min(2), Validators.max(24)]],
     dataPrimeiroVencimento: [
       this.adicionarDias(this.hoje, 30),
@@ -105,7 +106,7 @@ export class SimuladorPropostaComponent {
     this.erroAceite.set(null);
     this.confirmandoAceite.set(false);
     const valores = this.formulario.getRawValue();
-    const dados: DadosSimulacao = {
+    const dados: IDadosSimulacao = {
       dividaId: divida.id,
       tipoPagamento: valores.tipoPagamento,
       quantidadeParcelas:
@@ -117,7 +118,7 @@ export class SimuladorPropostaComponent {
         .slice(0, 10),
     };
     this.propostas
-      .simular(dados)
+      .simularDivida(dados)
       .pipe(finalize(() => this.carregando.set(false)))
       .subscribe({
         next: (proposta) => this.proposta.set(proposta),
@@ -154,7 +155,7 @@ export class SimuladorPropostaComponent {
     this.erroAceite.set(null);
     this.formulario.disable({ emitEvent: false });
     this.propostas
-      .aceitar(proposta.id)
+      .aceitarProposta(proposta.id)
       .pipe(
         finalize(() => {
           this.aceitando.set(false);
@@ -164,7 +165,7 @@ export class SimuladorPropostaComponent {
       .subscribe({
         next: () => {
           this.aceiteConcluido.set(true);
-          this.dividas.carregar();
+          this.dividas.carregarDividas();
           void this.roteador.navigate(["/dividas"]);
         },
         error: () =>
@@ -174,7 +175,7 @@ export class SimuladorPropostaComponent {
       });
   }
 
-  temAjusteNaUltimaParcela(proposta: PropostaSimulada): boolean {
+  ajusteNaUltimaParcela(proposta: IPropostaSimulada): boolean {
     return (
       proposta.quantidadeParcelas > 1 &&
       Math.abs(proposta.valorUltimaParcela - proposta.valorParcela) >= 0.005
