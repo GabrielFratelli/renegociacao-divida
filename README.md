@@ -20,7 +20,7 @@
   <img src="frontend/src/app/assets/image/mobile/acordo.png" alt="dívida em acordo no celular" width="180" />
 </p>
 
-Protótipo criado para o desafio de renegociação de dívidas do Itaú. Conforme a restrição proposta, a experiência possui somente duas telas: **Dívidas** e **Simular proposta**. O login acontece em um diálogo e, como extensão do fluxo, a própria tela de simulação permite confirmar o acordo sem criar telas adicionais.
+Protótipo criado para o desafio de renegociação de dívidas. Conforme a restrição proposta, a experiência possui somente duas telas: **Dívidas** e **Simular proposta**. O login acontece em um diálogo e, como extensão do fluxo, a própria tela de simulação permite confirmar o acordo sem criar telas adicionais.
 
 ## Fluxo de negociação
 
@@ -88,7 +88,6 @@ flowchart TB
 renegociacao-dividas/
 ├── frontend/       # Angular standalone, Signals, Material e Jest
 ├── backend/        # BFF Node.js/TypeScript em camadas SOLID
-└── docs/           # Roteiro de apresentação e decisões do projeto
 ```
 
 Os nomes de domínio e das pastas criadas para o produto estão em português; arquivos estruturais convencionais do Angular permanecem com seus nomes padrão.
