@@ -1,3 +1,5 @@
+// Porta de persistência que define como os casos de uso listam, localizam e atualizam dívidas de um cliente.
+
 import { Divida } from "../entities/debt.js";
 
 export interface RepositorioDividas {

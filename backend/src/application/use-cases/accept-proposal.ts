@@ -1,3 +1,5 @@
+// Caso de uso do aceite: valida proposta e dívida, evita acordos concorrentes, cria o acordo e atualiza a dívida.
+
 import { randomUUID } from "node:crypto";
 import { Acordo } from "../../domain/entities/agreement.js";
 import { Divida } from "../../domain/entities/debt.js";

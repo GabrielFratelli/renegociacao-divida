@@ -1,3 +1,5 @@
+// Raiz de composição do BFF: instancia dependências, aplica proteções HTTP e registra rotas e tratamentos de erro.
+
 import cors from "cors";
 import express, { Express, NextFunction, Request, Response } from "express";
 import rateLimit from "express-rate-limit";
@@ -66,17 +68,17 @@ export const criarAplicacao = (
   aplicacao.post("/api/auth/login", controladorAutenticacao.login);
   aplicacao.get(
     "/api/dividas",
-    autenticar(servicoToken),
+    autenticar(servicoToken), // middleware
     controladorDividas.listar,
   );
   aplicacao.post(
     "/api/propostas/simular",
-    autenticar(servicoToken),
+    autenticar(servicoToken), // middleware
     controladorPropostas.simular,
   );
   aplicacao.post(
     "/api/propostas/:id/aceitar",
-    autenticar(servicoToken),
+    autenticar(servicoToken), // middleware
     controladorPropostas.aceitar,
   );
   aplicacao.use(

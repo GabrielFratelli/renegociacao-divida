@@ -1,3 +1,5 @@
+// Porta de persistência que define as operações de acordos exigidas pelos casos de uso, sem escolher um banco.
+
 import { Acordo } from "../entities/agreement.js";
 
 export interface RepositorioAcordos {

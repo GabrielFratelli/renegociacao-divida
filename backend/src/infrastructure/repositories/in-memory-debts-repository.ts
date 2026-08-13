@@ -1,3 +1,5 @@
+// Adaptador em memória de dívidas: fornece os dados de demonstração e permite listar, buscar e atualizar sem banco.
+
 import { Divida } from "../../domain/entities/debt.js";
 import { RepositorioDividas } from "../../domain/ports/debts-repository.js";
 

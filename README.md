@@ -69,17 +69,18 @@ flowchart TB
   gateway -.->|"Validação do JWT"| cognito
   gateway --> bff["AWS Lambda\nBFF Node.js / TypeScript"]
 
-  bff --> dados["Amazon DynamoDB\nPropostas e acordos\nPITR, KMS e escrita condicional"]
+  bff --> secrets["AWS Secrets Manager\nCredenciais e segredos"]
+  bff --> dados["Amazon DynamoDB\nPropostas e acordos\nEscritas condicionais"]
   bff --> dividas["APIs internas\nDívidas e cobrança"]
   bff --> logs["Amazon CloudWatch\nLogs, métricas e alarmes"]
 ```
 
 ### Decisões principais
 
-- O CloudFront entrega a SPA do bucket S3 privado com OAC. O AWS WAF fica associado à distribuição e o comportamento `/api/*` encaminha todos os métodos e o cabeçalho `Authorization` ao API Gateway, sem cache.
+- O CloudFront entrega a SPA do bucket S3 privado com OAC. O AWS WAF fica associado à distribuição e o comportamento `/api/*` encaminha todos os métodos e o cabeçalho `Authorization` ao API Gateway, sem cache. A hospedagem deve devolver `index.html` nos deep links do Angular e impedir que a origem da API contorne o perímetro do CloudFront/WAF.
 - O API Gateway HTTP API fornece JWT Authorizer, throttling e métricas. O Cognito autentica a SPA pelo Authorization Code com PKCE; o BFF continua validando titularidade e regras de negócio.
-- O BFF executa sob demanda em Lambda, escolha proporcional a uma API pequena, de requisições curtas e carga variável. Fargate passa a ser uma evolução possível se houver processamento contínuo, dependência forte de contêiner ou carga sustentada.
-- O DynamoDB armazena propostas e acordos com criptografia KMS, recuperação point-in-time, escritas condicionais para idempotência e transações quando os itens pertencem ao mesmo domínio. Em um banco real, a fonte oficial das dívidas continuaria nas APIs internas.
+- O BFF executaria sob demanda em Lambda, escolha proporcional a uma API pequena, de requisições curtas e carga variável. O servidor Express atual ainda precisaria de um handler/adaptador para API Gateway e Lambda. Fargate passa a ser uma evolução possível se houver processamento contínuo, dependência forte de contêiner ou carga sustentada.
+- O DynamoDB armazenaria propostas e acordos com escritas condicionais para idempotência e transações quando os itens pertencem ao próprio DynamoDB. O AWS Secrets Manager guardaria segredos e credenciais do BFF e a fonte oficial das dívidas continuaria nas APIs internas; coordenar DynamoDB com esse sistema externo exigiria idempotência e tratamento de falhas parciais.
 - O CloudWatch concentra logs estruturados, métricas e alarmes. ElastiCache, ALB, VPC Link, RDS e pipeline dedicado foram removidos do desenho inicial porque não existe requisito atual que justifique esses custos e saltos operacionais.
 
 ## Estrutura
@@ -154,13 +155,15 @@ npm --prefix backend run format:check
 npm --prefix frontend run format:check
 ```
 
-Validação da versão atual:
+Validação reexecutada em 12/08/2026:
 
-- 40 testes passando: 11 no backend e 29 no frontend;
-- cobertura de linhas: 96,66% no backend e 94,69% no frontend;
-- ESLint e Prettier sem erros;
-- auditoria npm completa sem vulnerabilidades conhecidas;
-- builds de produção concluídos sem warnings.
+- backend: 3 suítes e 11 testes passando; ESLint, Prettier e build sem erros;
+- frontend: ESLint e build de produção passando;
+- frontend: 6 de 10 suítes falham porque alguns testes ainda usam nomes e caminhos anteriores aos serviços atuais;
+- frontend: o Prettier aponta cinco arquivos fora do padrão;
+- bundle inicial do frontend: 595,63 kB, abaixo do limite de erro de 800 kB e próximo do alerta de 600 kB.
+
+Antes de apresentar todas as verificações como aprovadas, os testes e a formatação do frontend precisam ser sincronizados com o código atual. Cobertura e auditoria de dependências também devem ser medidas novamente em vez de reutilizar resultados antigos.
 
 Para executar os testes durante o desenvolvimento:
 
@@ -176,7 +179,7 @@ npm --prefix backend run build
 npm --prefix frontend run build
 ```
 
-O build padrão do frontend usa a configuração de produção, com hashing e budget inicial de 600 kB para alerta e 800 kB para erro. Após o build, o backend pode ser iniciado com `npm --prefix backend start`; os arquivos estáticos ficam em `frontend/dist/portal-renegociacao-dividas` e consomem `/api` na mesma origem.
+O build padrão do frontend usa a configuração de produção, com hashing e budget inicial de 600 kB para alerta e 800 kB para erro. Após o build, o backend pode ser iniciado com `npm --prefix backend start`. Os arquivos estáticos ficam em `frontend/dist/portal-renegociacao-dividas`, mas o Express atual não os publica: eles precisam ser entregues por um servidor web ou serviço de hospedagem configurado para encaminhar `/api` ao BFF na mesma origem.
 
 ## Atualizar as evidências
 

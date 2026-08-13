@@ -1,3 +1,5 @@
+// Entidade de domínio que representa o acordo criado após o aceite de uma proposta e seus valores de pagamento.
+
 export interface Acordo {
   id: string;
   propostaId: string;

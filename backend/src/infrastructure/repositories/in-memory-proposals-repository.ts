@@ -1,3 +1,5 @@
+// Adaptador em memória de propostas: salva e busca as simulações por identificador e cliente durante esta execução.
+
 import { Proposta } from "../../domain/entities/proposal.js";
 import { RepositorioPropostas } from "../../domain/ports/proposals-repository.js";
 

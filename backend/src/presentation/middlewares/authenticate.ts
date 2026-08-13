@@ -1,3 +1,5 @@
+// middleware - é executado antes de entrar na função do endpoint, para validar se o usuário está autenticado com o token, e pode ser usado para outras funcionalidades.
+
 import { NextFunction, Request, Response } from "express";
 import {
   ServicoToken,

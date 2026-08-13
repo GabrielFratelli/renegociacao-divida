@@ -1,3 +1,5 @@
+// Adaptador em memória de acordos: salva cópias dos dados e mantém um único acordo para cada proposta nesta execução.
+
 import { Acordo } from "../../domain/entities/agreement.js";
 import { RepositorioAcordos } from "../../domain/ports/agreements-repository.js";
 

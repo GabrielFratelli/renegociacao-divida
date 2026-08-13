@@ -1,3 +1,5 @@
+// Controlador de login: valida a requisição, confere a credencial de demonstração e devolve usuário e token.
+
 import { Request, Response } from "express";
 import { z } from "zod";
 import { ServicoToken } from "../../domain/ports/token-service.js";

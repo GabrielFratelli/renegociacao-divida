@@ -1,3 +1,5 @@
+// Caso de uso da simulação: valida os dados, calcula desconto e parcelas em centavos e salva a proposta temporária.
+
 import { randomUUID } from "node:crypto";
 import {
   Proposta,
