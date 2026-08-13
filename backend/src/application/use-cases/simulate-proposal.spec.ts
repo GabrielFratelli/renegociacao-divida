@@ -1,3 +1,5 @@
+// Testes da simulação: verificam persistência, descontos, arredondamento e rejeição de dívida ou data inelegível.
+
 import { RepositorioDividasMemoria } from "../../infrastructure/repositories/in-memory-debts-repository.js";
 import { RepositorioPropostasMemoria } from "../../infrastructure/repositories/in-memory-proposals-repository.js";
 import {

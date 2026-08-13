@@ -1,3 +1,5 @@
+// Ponto de entrada do BFF: carrega a configuração, cria a aplicação Express e inicia o servidor HTTP.
+
 import "dotenv/config";
 import { criarAplicacao } from "./infrastructure/composition/application-factory.js";
 

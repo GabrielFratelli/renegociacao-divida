@@ -1,3 +1,5 @@
+// Testes do aceite: cobrem criação, atualização, idempotência, concorrência, titularidade, expiração e elegibilidade.
+
 import { Divida } from "../../domain/entities/debt.js";
 import { Proposta } from "../../domain/entities/proposal.js";
 import { RepositorioAcordosMemoria } from "../../infrastructure/repositories/in-memory-agreements-repository.js";

@@ -1,3 +1,5 @@
+// Controlador de propostas: valida entradas HTTP, executa simulação ou aceite e traduz erros de negócio em status HTTP.
+
 import { Response } from "express";
 import { z } from "zod";
 import {

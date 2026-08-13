@@ -1,3 +1,5 @@
+// Tipos de domínio que representam a entrada da simulação, sua resposta pública e a proposta salva para o cliente.
+
 export type TipoPagamento = "A_VISTA" | "PARCELADO";
 
 export interface SolicitacaoSimulacao {

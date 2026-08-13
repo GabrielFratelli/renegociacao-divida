@@ -1,3 +1,5 @@
+// Caso de uso da listagem: busca as dívidas do cliente autenticado e deixa as que estão em acordo no final.
+
 import { Divida } from "../../domain/entities/debt.js";
 import { RepositorioDividas } from "../../domain/ports/debts-repository.js";
 

@@ -1,3 +1,5 @@
+// Adaptador de segurança JWT: emite tokens de 30 minutos e valida assinatura, emissor e dados do usuário.
+
 import jwt from "jsonwebtoken";
 import {
   ServicoToken,

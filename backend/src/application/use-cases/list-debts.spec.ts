@@ -1,3 +1,5 @@
+// Teste da listagem: garante que dívidas ainda negociáveis sejam apresentadas antes das que já estão em acordo.
+
 import { Divida } from "../../domain/entities/debt.js";
 import { RepositorioDividasMemoria } from "../../infrastructure/repositories/in-memory-debts-repository.js";
 import { ListarDividas } from "./list-debts.js";

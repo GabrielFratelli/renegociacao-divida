@@ -1,3 +1,5 @@
+// Entidade de domínio que representa uma dívida e os dados acrescentados quando ela passa a ter um acordo.
+
 export type StatusDivida = "ATRASADA" | "A_VENCER" | "EM_ACORDO";
 
 export interface Divida {
